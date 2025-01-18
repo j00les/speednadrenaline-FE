@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: 'digital-7';
+    font-weight: 900;
+    src: url(/fonts/digital-7-mono.ttf) format('woff2');
+  }
+}

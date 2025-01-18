@@ -1,0 +1,264 @@
+@font-face {
+    font-family: 'Sugo-Pro'; 
+    src: url('assets/fonts/sugo_pro_classic/Sugo-Pro-Classic-Bold-trial.ttf') format('truetype'); 
+}
+
+body {
+  color: black;
+  margin: 0;
+  padding: 0;
+  font-family: 'Titillium Web', sans-serif;
+  font-size: large;
+  font-weight: 600;
+  letter-spacing: 2px; 
+}
+
+.container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-start; /* Align children to the top */
+  gap: 30px;
+  max-width: 1200px;
+  padding-top: 6rem;
+  margin: 0 auto;
+}
+
+.form-container {
+  flex: 0 0 35%; /* Adjust width as needed */
+}
+
+.table-container {
+  flex: 0 0 60%; /* Adjust width as needed */
+  height: 500px; /* Fixed height for the table section */
+  overflow-y: auto; 
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #333;
+}
+
+.table-header {
+  color: red;
+  text-align: center;
+  margin: 0;
+}
+
+.header img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.header h1 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  table-layout: fixed;
+}
+
+.table th,
+.table td {
+  text-align: right;
+}
+
+.table th {
+  background-color: red;
+  color: white;
+}
+
+.table tr:last-child {
+  border-bottom: none;
+}
+
+table .position {
+  width: 1rem;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+table .position-header {
+  width: 1rem;
+  text-align: center;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+table .time-header {
+  width: 1rem;
+  text-align: center;
+}
+
+table .car-header {
+  width: 1rem;
+  text-align: center;
+}
+
+table .button-header {
+  width: .5rem;
+  text-align: center;
+}
+
+table .delete-header {
+  width: 1rem;
+  text-align: center;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.table .name {
+  width: 100px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.table .time {
+  width: 100px;
+  text-align: center;
+}
+
+.table .car {
+  width: 100px;
+  text-align: center;
+}
+
+.table .gap {
+  width: 50px;
+}
+
+.color-box {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+}
+
+.red {
+  background-color: #ff0000;
+  height: 1.5rem;
+  width: 4px;
+  border: solid 1px red;
+  max-width: 1200px;
+  padding: 3px;
+}
+
+.blue {
+  background-color: #0000ff;
+  height: 1.5rem;
+  width: 4px;
+  border: solid 1px blue;
+  padding: 3px;
+}
+
+.green {
+  background-color: #008000;
+  height: 1.5rem;
+  width: 4px;
+  border: solid 1px green;
+  padding: 3px;
+}
+
+.yellow {
+  background-color: #ffff00;
+  height: 1.5rem;
+  width: 4px;
+  border: solid 1px yellow;
+  padding: 3px;
+}
+
+.orange {
+  background-color: #ff8c00;
+  height: 1.5rem;
+  width: 4px;
+  border: solid 1px orange;
+  padding: 3px;
+}
+
+.violet {
+  background-color: #8a2be2;
+  height: 1.5rem;
+  width: 4px;
+  border: solid 1px #8a2be2;
+  padding: 3px;
+}
+
+.player-name {
+  width: 10rem;
+  display: flex;
+  gap: 0.4rem;
+}
+
+form {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+input[type='text'],
+input[type='number']
+{
+  padding: 10px;
+  font-size: 16px;
+  /* background-color: #333; */
+  border: 1px solid #444;
+  border-radius: 4px;
+}
+
+input[type='submit'] {
+  padding: 10px;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: small;
+  font-family: 'Titillium Web', sans-serif "
+}
+
+#exportData {
+  width: 12rem;
+  padding: 10px;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: small; 
+  font-family: 'Titillium Web', sans-serif"
+}
+
+#deleteData {
+  width: 12rem;
+  padding: 10px;
+  background-color: #e62129;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: small; 
+  font-family: 'Titillium Web', sans-serif"
+}
+
+.export-and-delete-button {
+  display: flex;
+  justify-content: space-between;
+
+}
+
+p {
+  margin: 5px;
+}
+
+.single-digit {
+  margin-left: .7rem;
+}

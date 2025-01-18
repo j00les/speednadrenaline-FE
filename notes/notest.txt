@@ -1,0 +1,9 @@
+gap 1st
+- colorcode fwd awd 
+- history di input (dropdown history) kondisi dan mobil (delete by run history)
+- barcode,
+- deploy,
+- link, 
+- archive,
+- database
+- timeattack, slalom bedain
