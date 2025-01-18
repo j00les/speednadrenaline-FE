@@ -51,7 +51,6 @@ const Table = (props) => {
       </div>
     </div>
   );
-
   return (
     <>
       {isLeaderboardTable && renderLeaderboardTable()}

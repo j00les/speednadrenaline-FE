@@ -1,42 +1,70 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { TreeTable } from 'primereact/treetable';
+import { Column } from 'primereact/column';
 import { useWebSocket } from '../context/WebsocketContext';
+import { Dropdown } from 'primereact/dropdown';
 
-const Overall = () => {
-  const { runsByDriver } = useWebSocket();
+export default function Overall() {
+  const { runsByDriver } = useWebSocket(); // Access WebSocket context for data
+  const [isDropdownVisible, setIsDropdownVisible] = useState(true);
+
+  // Function to generate the structure for the TreeTable
+  const generateTableData = () => {
+    return Object.keys(runsByDriver).map((driverName) => {
+      const cars = runsByDriver[driverName];
+      const carNodes = Object.keys(cars).map((carName) => {
+        return {
+          key: `${driverName}-${carName}`,
+          data: {
+            driverName,
+            carName,
+            lapTimes: cars[carName].join(', ')
+          },
+          children: [] // No nested children in this case
+        };
+      });
+      return {
+        key: driverName,
+        data: {
+          driverName,
+          carName: '',
+          lapTimes: ''
+        },
+        children: carNodes
+      };
+    });
+  };
+
+  // Prepare data for TreeTable
+  const treeTableData = generateTableData();
 
   return (
-    <div className="overflow-auto">
-      <table className="min-w-full border-collapse border border-gray-200">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="border border-gray-300 px-4 py-2 text-left">Driver Name</th>
-            <th className="border border-gray-300 px-4 py-2 text-left">Car and Lap Times</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Object.entries(runsByDriver).map(([driverName, cars]) => (
-            <tr key={driverName}>
-              {/* Driver Name Column */}
-              <td className="border border-gray-300 px-4 py-2 font-bold align-top">{driverName}</td>
-              {/* Nested Car and Lap Times Column */}
-              <td className="border border-gray-300 px-4 py-2">
-                {Object.entries(cars).map(([carName, lapTimes]) => (
-                  <div key={carName} className="mb-2">
-                    <div className="font-semibold">{carName}</div>
-                    <ul className="ml-4 list-disc">
-                      {lapTimes.map((time, index) => (
-                        <li key={index}>{time}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="card">
+      <TreeTable value={treeTableData} tableStyle={{ minWidth: '50rem' }}>
+        <Column field="driverName" header="Driver Name" expander />
+        <Column
+          field="carName"
+          header="Car Name"
+          body={(rowData) => (
+            <div>
+              <Dropdown
+                value={rowData.data.carName}
+                options={Object.keys(runsByDriver[rowData.data.driverName]).map((carName) => ({
+                  label: carName,
+                  value: carName
+                }))}
+                onChange={(e) => console.log(e.value)}
+                placeholder="Select Car"
+                autoFocus
+                overlayVisible={isDropdownVisible} // Keep dropdown expanded
+                onFocus={() => setIsDropdownVisible(true)} // Keep it open when focused
+                onBlur={() => setIsDropdownVisible(true)} // Keep it open even when blurred
+              />
+            </div>
+          )}
+        />
+        <Column field="lapTimes" header="Lap Times" />
+      </TreeTable>
     </div>
   );
-};
-
-export default Overall;
+}
