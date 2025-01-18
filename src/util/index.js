@@ -4,15 +4,12 @@ const parseLapTime = (rawTime) => {
   const seconds = parseInt(rawTimeString.slice(2, 4), 10); // Next 2 characters for seconds
   const milliseconds = parseInt(rawTimeString.slice(4, 7), 10); // Last 3 characters for milliseconds
 
-  console.log(minutes, seconds, milliseconds, '--debug time');
   // Validate time segments
   if (seconds >= 60 || milliseconds >= 1000) {
     throw new Error(`Invalid lap time: ${rawTime}`);
   }
 
   const result = minutes * 60000 + seconds * 1000 + milliseconds;
-
-  console.log(result, '--debug result');
 
   return result;
 };
@@ -25,8 +22,6 @@ const formatLapTime = (totalMilliseconds) => {
   const result = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(
     milliseconds
   ).padStart(3, '0')}`;
-
-  console.log(result);
 
   return result;
 };

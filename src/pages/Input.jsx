@@ -16,7 +16,7 @@ const Input = () => {
   const handleCarNameChange = (event) => setCarName(event.target.value);
   const handleLapTimeChange = (event) => setLapTime(event.target.value);
   const handleDriverNameChange = (event) => setDriverName(event.target.value);
-  const handleCarTypeChange = (event) => setCarType(event.target.value);
+  const handleCarTypeChange = (event) => setCarType('fwd');
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -60,7 +60,7 @@ const Input = () => {
           />
           <Dropdown
             options={CAR_OPTIONS}
-            value={carType}
+            value={'fwd'}
             onChange={handleCarTypeChange}
             id="1"
             placeholder="Select Car Type"

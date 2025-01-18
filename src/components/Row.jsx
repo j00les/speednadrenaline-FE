@@ -1,5 +1,5 @@
 const Row = (props) => {
-  const { leaderboardData } = props;
+  const { leaderboardData, isInputRow } = props;
 
   const getColorForCarType = (carType) => {
     let blockColor = 'bg-gray-500';
@@ -22,21 +22,25 @@ const Row = (props) => {
   return (
     <>
       {leaderboardData.map((record, index) => {
-        const { driverName, lapTime, carName, carType, gapToFirst } = record;
+        const { name, lapTime, carName, carType, gapToFirst } = record;
 
+        console.log(record, '--debug di row');
         const position = index + 1;
         const positionMargin = position < 10 && 'ml-[.8rem]';
         const styling = position % 2 === 0 && 'bg-[#D4D4D4]';
         const blockColor = getColorForCarType(carType);
+        const fontStyle = isInputRow
+          ? 'font-titillium font-semibold text-[1.4rem]'
+          : 'font-sugo text-[1.8rem]';
 
         return (
-          <tr key={index} className={`font-sugo uppercase font-medium ${styling}`}>
+          <tr key={index} className={`font-sugo  uppercase ${styling}`}>
             <td className="flex gap-1.5 mt-2  w-[13rem]">
               <span className={`text-[1.4rem] font-titillium font-medium ${positionMargin}`}>
                 {position}
               </span>
-              <span className={`w-[.5rem] ${blockColor}`}></span>
-              <span className={`text-[1.7rem]  tracking-tight`}>{driverName}</span>
+              <span className={`w-[.5rem]   ${blockColor}`}></span>
+              <span className={`${fontStyle} text-[1.7rem] tracking-tight`}>{name}</span>
             </td>
             <td className="font-titillium text-[1.4rem] font-semibold text-center">{lapTime}</td>
             <td className="text-[1.4rem] text-center pr-[.5rem] font-titillium font-semibold">
