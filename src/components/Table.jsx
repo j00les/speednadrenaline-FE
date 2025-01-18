@@ -1,5 +1,5 @@
 import Row from './Row';
-import logo from '/sa-logo.png';
+import logo from '../assets/sa-logo.png';
 
 const Table = (props) => {
   const { leaderboardData, isInputTable, isLeaderboardTable } = props;
@@ -17,11 +17,11 @@ const Table = (props) => {
           <thead className="text-2xl">
             <tr className="bg-[#ff0000] text-white">
               <th className="text-center rounded-tl-[3px] rounded-bl-[3px]">POSITION</th>
-              <th className="text-center pr-[2.2rem]">TIME</th>
-              <th className="text-center pr-[1rem]">
+              <th className="text-center pr-[1rem]">TIME</th>
+              <th className="text-center pr-[.2rem]">
                 GAP TO 1<sup>st</sup>
               </th>
-              <th className="text-enter rounded-tr-[3px] rounded-br-[3px] pr-[3rem]">CAR NAME</th>
+              <th className="text-enter rounded-tr-[3px] rounded-br-[3px] pr-[4rem]">CAR NAME</th>
             </tr>
           </thead>
           <tbody className="text-2xl">
@@ -39,7 +39,7 @@ const Table = (props) => {
           <tr>
             <th className="text-center bg-red-600 text-white px-4 py-2 rounded-tl-lg">Position</th>
             <th className="text-center bg-red-600 text-white px-4 py-2">Time</th>
-            <th className="text-center bg-red-600 text-white px-4 py-2">Car Name</th>
+            <th className="text-center bg-red-600 textpwhite px-4 py-2">Car Name</th>
             <th className="text-center bg-red-600 text-white px-4 py-2 rounded-tr-lg"></th>
           </tr>
         </thead>
