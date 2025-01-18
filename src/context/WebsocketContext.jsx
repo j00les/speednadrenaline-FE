@@ -1,8 +1,12 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { sortAndCalculateLeaderboard } from '../util';
+import { openDB } from 'idb';
 
 const WebSocketContext = createContext();
+const DATABASE_NAME = 'WebSocketDataDB';
+const RUNS_STORE = 'runsByDriverStore';
+const LEADERBOARD_STORE = 'leaderboardStore';
 
 const useWebSocket = () => {
   const context = useContext(WebSocketContext);
@@ -33,6 +37,70 @@ const WebSocketProvider = ({ children }) => {
     children: PropTypes.node.isRequired
   };
 
+  // Initialize IndexedDB
+  useEffect(() => {
+    const initializeDB = async () => {
+      const db = await openDB(DATABASE_NAME, 1, {
+        upgrade(db) {
+          if (!db.objectStoreNames.contains(RUNS_STORE)) {
+            db.createObjectStore(RUNS_STORE);
+          }
+          if (!db.objectStoreNames.contains(LEADERBOARD_STORE)) {
+            db.createObjectStore(LEADERBOARD_STORE);
+          }
+        }
+      });
+
+      // Load existing data from IndexedDB for both stores
+      const storedRuns = await db.get(RUNS_STORE, 'drivers');
+      const storedLeaderboard = await db.get(LEADERBOARD_STORE, 'leaderboard');
+
+      if (storedRuns) {
+        setRunsByDriver(storedRuns);
+      }
+      if (storedLeaderboard) {
+        setData(storedLeaderboard);
+      }
+    };
+
+    initializeDB();
+  }, []);
+
+  // Save `runsByDriver` to IndexedDB whenever it changes
+  useEffect(() => {
+    const saveRunsToIndexedDB = async () => {
+      const db = await openDB(DATABASE_NAME, 1);
+      await db.put(RUNS_STORE, runsByDriver, 'drivers');
+    };
+
+    if (Object.keys(runsByDriver).length > 0) {
+      saveRunsToIndexedDB();
+    }
+  }, [runsByDriver]);
+
+  // Save `data` (leaderboard) to IndexedDB whenever it changes
+  useEffect(() => {
+    const saveLeaderboardToIndexedDB = async () => {
+      try {
+        const db = await openDB(DATABASE_NAME, 1);
+
+        // Clear previous leaderboard entries to ensure no duplicates
+        await db.clear(LEADERBOARD_STORE);
+
+        // Save deduplicated leaderboard
+        await db.put(LEADERBOARD_STORE, data, 'leaderboard');
+        console.log('Leaderboard data saved to IndexedDB.');
+      } catch (error) {
+        console.error('Error saving leaderboard to IndexedDB:', error);
+      }
+    };
+
+    if (data.length > 0) {
+      saveLeaderboardToIndexedDB();
+    }
+  }, [data]);
+
+  //socket logic
   useEffect(() => {
     const ws = new WebSocket('ws://localhost:3000');
 
@@ -56,7 +124,7 @@ const WebSocketProvider = ({ children }) => {
             return acc;
           }, {});
 
-          //new entry or betterlap time
+          // Add or update with the new data
           if (
             !leaderboardMap[uniqueDriverCarKey] ||
             lapTime < leaderboardMap[uniqueDriverCarKey].lapTime
@@ -64,19 +132,15 @@ const WebSocketProvider = ({ children }) => {
             leaderboardMap[uniqueDriverCarKey] = { name: driverName, carName, lapTime };
           }
 
+          // Convert back to an array
           const updatedLeaderboard = Object.values(leaderboardMap);
 
-          // gap to first logic
+          // Gap to first logic
           const firstPlaceTime = Math.min(...updatedLeaderboard.map((entry) => entry.lapTime));
-          const leaderboardWithGap = updatedLeaderboard.map((entry) => {
-            const gap = entry.lapTime - firstPlaceTime;
-            return {
-              ...entry,
-              gapToFirst: formatGapToFirstPlace(gap) // Add formatted gap
-            };
-          });
-
-          return leaderboardWithGap;
+          return updatedLeaderboard.map((entry) => ({
+            ...entry,
+            gapToFirst: formatGapToFirstPlace(entry.lapTime - firstPlaceTime)
+          }));
         });
 
         // Update runs by driver with all lap times
