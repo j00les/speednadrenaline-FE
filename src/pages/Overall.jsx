@@ -49,10 +49,7 @@ const Overall = () => {
             <React.Fragment key={driverName}>
               {/* Driver Row */}
               <tr className="bg-gray-50">
-                <td
-                  colSpan="2"
-                  className="px-4 py-2 border border-gray-300 font-sugo text-[1.6rem]"
-                >
+                <td colSpan="2" className="px-4 border border-gray-300 font-sugo text-[1.6rem]">
                   <div className="flex uppercase items-center justify-between">{driverName}</div>
                 </td>
               </tr>
@@ -61,9 +58,9 @@ const Overall = () => {
               {cars.map(({ carName, lapTimes }) => {
                 return (
                   <tr key={`${driverName}-${carName}`} className="bg-gray-100">
-                    <td className="px-4 py-2 border uppercase border-gray-300 pl-8">{carName}</td>
-                    <td className="px-4 py-2 border border-gray-300">
-                      <ul className="list-disc pl-6">
+                    <td className="px-4 border uppercase border-gray-300 pl-8">{carName}</td>
+                    <td className="px-4 border border-gray-300">
+                      <ul className="list-disc pl-6 uppercase">
                         {lapTimes.map(({ lapTime, runNumber }) => (
                           <li key={runNumber}>{`run ${runNumber}: ${formatLapTime(lapTime)}`}</li>
                         ))}
