@@ -5,10 +5,10 @@ import Input from './pages/Input';
 import Leaderboard from './pages/Leaderboard';
 import Overall from './pages/Overall';
 import Result from './pages/Result';
-import { WebSocketProvider } from './context/WebSocketContext';
 
 import Fade from './components/Fade';
 import QRCodePage from './pages/QRCode';
+import { WebSocketProvider } from './context/WebSocketContext.jsx';
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState('/overall'); // Track current page
