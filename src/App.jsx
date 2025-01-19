@@ -8,7 +8,7 @@ import Result from './pages/Result';
 
 import Fade from './components/Fade';
 import QRCodePage from './pages/QRCode';
-import { WebSocketProvider } from '@/context/WebSocketContext';
+import { WebSocketProvider } from './context/WebsocketContext';
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState('/overall'); // Track current page
