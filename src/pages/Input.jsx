@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import Dropdown from '../components/Dropdown';
 import Table from '../components/Table';
-import { useWebSocket } from '../context/WebsocketContext';
+import { useWebSocket } from '../context/WebSocketContext';
 
 const Input = () => {
   const { data: leaderboardData, sendData } = useWebSocket(); // Get leaderboardData from context

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-import { useWebSocket } from '../context/WebsocketContext';
 import { formatLapTime } from '../util';
+import { useWebSocket } from '../context/WebSocketContext';
 
 const ITEMS_PER_PAGE = 5;
 
