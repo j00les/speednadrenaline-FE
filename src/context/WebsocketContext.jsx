@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { sortAndCalculateLeaderboard } from '../util';
-import { openDB } from 'idb';
+import { openDB, deleteDB } from 'idb';
 
 const WebSocketContext = createContext();
 const DATABASE_NAME = 'WebSocketDataDB';
@@ -22,6 +22,15 @@ const useWebSocket = () => {
     data: sortedLeaderboard // Return processed leaderboard data
   };
 };
+
+async function deleteIndexedDB(databaseName) {
+  try {
+    await deleteDB(databaseName);
+    console.log(`Database "${databaseName}" deleted successfully.`);
+  } catch (error) {
+    console.error(`Error deleting database "${databaseName}":`, error);
+  }
+}
 
 const WebSocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
@@ -63,7 +72,9 @@ const WebSocketProvider = ({ children }) => {
       }
     };
 
+    // Usage
     initializeDB();
+    // deleteIndexedDB(DATABASE_NAME);
   }, []);
 
   // Save `runsByDriver` to IndexedDB whenever it changes
@@ -147,7 +158,6 @@ const WebSocketProvider = ({ children }) => {
         setRunsByDriver((prevRuns) => {
           const runsCopy = { ...prevRuns };
 
-          console.log(driverName, carName, lapTime);
           if (!runsCopy[driverName]) {
             runsCopy[driverName] = {};
           }
@@ -155,10 +165,16 @@ const WebSocketProvider = ({ children }) => {
           if (!runsCopy[driverName][carName]) {
             runsCopy[driverName][carName] = [];
           }
+          // Calculate the next runNumber based on the current number of runs for the car
+          const currentRunCount = runsCopy[driverName][carName].length;
+          const nextRunNumber = currentRunCount + 1;
 
-          runsCopy[driverName][carName].push(lapTime);
-          console.log(runsCopy, '--debug runs copy');
+          runsCopy[driverName][carName].push({
+            lapTime, // The lap time value
+            runNumber: nextRunNumber // The calculated run number
+          });
 
+          console.log(runsCopy, '--debug runs copy with runNumber');
           return runsCopy;
         });
       } catch (error) {

@@ -48,4 +48,4 @@ const sortAndCalculateLeaderboard = (data) => {
   return calculateLapTime(sortedData);
 };
 
-export { sortAndCalculateLeaderboard };
+export { sortAndCalculateLeaderboard, formatLapTime };

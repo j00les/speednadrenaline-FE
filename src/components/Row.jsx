@@ -30,12 +30,13 @@ const Row = (props) => {
         const styling = position % 2 === 0 && 'bg-[#D4D4D4]';
         const blockColor = getColorForCarType(carType);
         const fontStyle = isInputRow
-          ? 'font-titillium font-semibold text-[1.4rem]'
+          ? 'font-titillium font-semibold text-[1.39rem]'
           : 'font-sugo text-[1.8rem]';
+        const positionMargintop = isInputRow ? 'mt-1' : 'mt-2';
 
         return (
           <tr key={index} className={`font-sugo  uppercase ${styling}`}>
-            <td className="flex gap-1.5 mt-2  w-[13rem]">
+            <td className={`flex gap-1.5 ${positionMargintop}  w-[13rem]`}>
               <span className={`text-[1.4rem] font-titillium font-medium ${positionMargin}`}>
                 {position}
               </span>
