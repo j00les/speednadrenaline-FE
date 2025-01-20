@@ -12,6 +12,7 @@ const Input = () => {
   const [driverName, setDriverName] = useState('');
   const [lapTime, setLapTime] = useState('');
   const [carType, setCarType] = useState('');
+  const [recordId, setRecordId] = useState(1); // Initialize auto-incrementing ID
 
   const handleCarNameChange = (event) => setCarName(event.target.value);
   const handleLapTimeChange = (event) => setLapTime(event.target.value);
@@ -27,6 +28,7 @@ const Input = () => {
     const trimmedCarType = carType.trim();
 
     const newRecord = {
+      id: recordId,
       driverName: trimmedDriverName,
       lapTime: trimmedLapTime,
       carName: trimmedCarName,
@@ -36,6 +38,7 @@ const Input = () => {
 
     sendData(newRecord);
 
+    setRecordId((prevId) => prevId + 1); // Increment the record ID for the next record
     setCarName('');
     setLapTime('');
     setDriverName('');

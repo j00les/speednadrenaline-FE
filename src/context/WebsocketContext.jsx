@@ -126,6 +126,7 @@ const WebSocketProvider = ({ children }) => {
         const driverName = updatedData.driverName;
         const carName = updatedData.carName;
         const lapTime = updatedData.lapTime;
+        const id = updatedData.id;
         const uniqueDriverCarKey = `${driverName}-${carName}`;
 
         setData((prevLeaderboard) => {
@@ -140,7 +141,7 @@ const WebSocketProvider = ({ children }) => {
             !leaderboardMap[uniqueDriverCarKey] ||
             lapTime < leaderboardMap[uniqueDriverCarKey].lapTime
           ) {
-            leaderboardMap[uniqueDriverCarKey] = { name: driverName, carName, lapTime };
+            leaderboardMap[uniqueDriverCarKey] = { name: driverName, carName, lapTime, id };
           }
 
           // Convert back to an array

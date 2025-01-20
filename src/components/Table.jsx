@@ -25,6 +25,7 @@ const Table = (props) => {
       setCurrentPage((prevPage) => prevPage - 1);
     }
   };
+
   const renderLeaderboardTable = () => (
     <div className="flex justify-center items-center py-10 font-titillium mx-auto w-[42rem]">
       <div className="w-full max-w-4xl bg-white rounded-lg">
@@ -43,8 +44,16 @@ const Table = (props) => {
               <th className="text-enter rounded-tr-[3px] rounded-br-[3px] pr-[4rem]">CAR NAME</th>
             </tr>
           </thead>
+
           <tbody className="text-2xl">
-            <Row isLeaderboardTable leaderboardData={leaderboardData} />
+            {leaderboardData.map((record, index) => (
+              <Row
+                key={`${record.name}-${record.carName}-${index}`}
+                record={record}
+                index={index}
+                isLeaderboardRow
+              />
+            ))}
           </tbody>
         </table>
       </div>
@@ -66,7 +75,14 @@ const Table = (props) => {
             </tr>
           </thead>
           <tbody className="text-2xl">
-            <Row isInputRow leaderboardData={leaderboardData} />
+            {leaderboardData.map((record, index) => (
+              <Row
+                key={`${record.name}-${record.carName}-${index}`}
+                record={record}
+                index={index}
+                isInputRow
+              />
+            ))}
           </tbody>
         </table>
       </div>
@@ -94,7 +110,14 @@ const Table = (props) => {
             </tr>
           </thead>
           <tbody className="text-xs sm:text-sm md:text-base">
-            <Row isResultRow leaderboardData={currentItems} />
+            {currentItems.map((record, index) => (
+              <Row
+                key={`${record.name}-${record.carName}-${index}`}
+                record={record}
+                index={index + indexOfFirstItem}
+                isResultRow
+              />
+            ))}
           </tbody>
         </table>
 

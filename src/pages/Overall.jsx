@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { formatLapTime } from '../util';
 import { useWebSocket } from '../context/WebSocketContext';
+import overall from '../assets/run-overall.png';
 
 const ITEMS_PER_PAGE = 5;
 
@@ -39,41 +40,79 @@ const Overall = () => {
     <div className="overflow-x-auto w-[42rem] mx-auto py-10 text-[1rem]">
       <table className="min-w-full border-collapse table-fixed  border-gray-300 font-titillium">
         <thead className="bg-[#ff0000] text-white">
-          <tr>
-            <th className="rounded-tl-[3px] rounded-bl-[3px] uppercase text-center">Name</th>
-            <th className="uppercase text-center rounded-tr-[3px] rounded-br-[3px]">times</th>
-          </tr>
+          <tr></tr>
         </thead>
         <tbody>
           {paginatedData.map(({ driverName, cars }) => (
             <React.Fragment key={driverName}>
               {/* Driver Row */}
-              <tr className="bg-blue-600">
-                <td colSpan="2" className="px-4 border border-gray-300 font-sugo text-[1.4rem]">
-                  <div className="flex text-white uppercase items-center justify-between">
-                    {driverName}
+              <tr className="">
+                <td className="px-4  border-gray-300 font-sugo text-[1.2rem]">
+                  <div className=" w-[10rem] flex items-center justify-between text-white uppercase bg-[#ff0000] transform -skew-x-[28deg] mt-4">
+                    <span className="transform skew-x-12 ml-2">{driverName}</span>
                   </div>
                 </td>
               </tr>
               {/* Expanded Rows for Cars */}
               {cars.map(({ carName, lapTimes }, index) => {
+                // Find the fastest lap time
+                const fastestLapTime = Math.min(
+                  ...lapTimes.map(({ lapTime }) => parseFloat(lapTime))
+                );
+
+                // Helper function to chunk data into groups of 5
+                const chunkArray = (array, size) => {
+                  const chunks = [];
+                  for (let i = 0; i < array.length; i += size) {
+                    chunks.push(array.slice(i, i + size));
+                  }
+                  return chunks;
+                };
+
+                // Split lapTimes into chunks of 5
+                const lapTimeChunks = chunkArray(lapTimes, 5);
+
                 return (
-                  <tr
-                    key={`${carName}-${index}`}
-                    className={index % 2 !== 0 ? 'bg-[#D4D4D4]' : 'bg-white'}
-                  >
-                    <td className="pl-4 border uppercase border-gray-300 pl-8">{carName}</td>
-                    <td className="pl-2 border border-gray-300">
-                      <ul className="list-disc pl-6 uppercase">
-                        {lapTimes.map(({ lapTime, runNumber }) => (
-                          <li className="text-red-500" key={runNumber}>
-                            <span className="text-black italic">{`run ${runNumber} `}</span>
-                            <span className="text-black font-bold ml-2">
-                              {formatLapTime(lapTime)}
-                            </span>
-                          </li>
+                  <tr key={`${carName}-${index}`} className="relative">
+                    <td className="pl-4 border-b uppercase border-gray-300 pl-8">{carName}</td>
+                    <td className="border-b border-gray-300">
+                      <div className="flex gap-4 mt-4">
+                        {lapTimeChunks.map((chunk, chunkIndex) => (
+                          <ul
+                            key={chunkIndex}
+                            className={`list-disc uppercase list-none ${
+                              chunkIndex % 2 === 0 ? 'text-left' : 'text-right'
+                            }`}
+                          >
+                            {chunk.map(({ lapTime, runNumber }) => {
+                              const isGray =
+                                (runNumber - 1) % 5 === 0 || // 1, 6, 11
+                                (runNumber - 3) % 5 === 0 || // 3, 8, 13
+                                (runNumber - 5) % 5 === 0; // 5, 10, 15
+
+                              return (
+                                <div
+                                  key={runNumber}
+                                  className={`${isGray ? 'bg-gray-100' : ''} p-2`}
+                                >
+                                  <li
+                                    className={`${
+                                      parseFloat(lapTime) === fastestLapTime
+                                        ? 'text-green-500 font-bold'
+                                        : 'text-red-500'
+                                    }`}
+                                  >
+                                    <span className="text-black italic">{`run ${runNumber} `}</span>
+                                    <span className="text-black ml-2">
+                                      {formatLapTime(lapTime)}
+                                    </span>
+                                  </li>
+                                </div>
+                              );
+                            })}
+                          </ul>
                         ))}
-                      </ul>
+                      </div>
                     </td>
                   </tr>
                 );
