@@ -36,33 +36,42 @@ const Overall = () => {
   };
 
   return (
-    <div className="overflow-x-auto w-[42rem] mx-auto">
-      <table className="min-w-full border-collapse border border-gray-300 font-titillium">
-        <thead className="bg-gray-100 text-2xl">
+    <div className="overflow-x-auto w-[42rem] mx-auto py-10 text-[1rem]">
+      <table className="min-w-full border-collapse table-fixed  border-gray-300 font-titillium">
+        <thead className="bg-[#ff0000] text-white">
           <tr>
-            <th className="px-4 py-2 border uppercase border-gray-300 text-left">Name</th>
-            <th className="px-4 py-2 border uppercase border-gray-300 text-left">times</th>
+            <th className="rounded-tl-[3px] rounded-bl-[3px] uppercase text-center">Name</th>
+            <th className="uppercase text-center rounded-tr-[3px] rounded-br-[3px]">times</th>
           </tr>
         </thead>
-        <tbody className="text-[1.4rem] ">
+        <tbody>
           {paginatedData.map(({ driverName, cars }) => (
             <React.Fragment key={driverName}>
               {/* Driver Row */}
-              <tr className="bg-gray-50">
-                <td colSpan="2" className="px-4 border border-gray-300 font-sugo text-[1.6rem]">
-                  <div className="flex uppercase items-center justify-between">{driverName}</div>
+              <tr className="bg-blue-600">
+                <td colSpan="2" className="px-4 border border-gray-300 font-sugo text-[1.4rem]">
+                  <div className="flex text-white uppercase items-center justify-between">
+                    {driverName}
+                  </div>
                 </td>
               </tr>
-
               {/* Expanded Rows for Cars */}
-              {cars.map(({ carName, lapTimes }) => {
+              {cars.map(({ carName, lapTimes }, index) => {
                 return (
-                  <tr key={`${driverName}-${carName}`} className="bg-gray-100">
-                    <td className="px-4 border uppercase border-gray-300 pl-8">{carName}</td>
-                    <td className="px-4 border border-gray-300">
+                  <tr
+                    key={`${carName}-${index}`}
+                    className={index % 2 !== 0 ? 'bg-[#D4D4D4]' : 'bg-white'}
+                  >
+                    <td className="pl-4 border uppercase border-gray-300 pl-8">{carName}</td>
+                    <td className="pl-2 border border-gray-300">
                       <ul className="list-disc pl-6 uppercase">
                         {lapTimes.map(({ lapTime, runNumber }) => (
-                          <li key={runNumber}>{`run ${runNumber}: ${formatLapTime(lapTime)}`}</li>
+                          <li className="text-red-500" key={runNumber}>
+                            <span className="text-black italic">{`run ${runNumber} `}</span>
+                            <span className="text-black font-bold ml-2">
+                              {formatLapTime(lapTime)}
+                            </span>
+                          </li>
                         ))}
                       </ul>
                     </td>

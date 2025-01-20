@@ -1,5 +1,6 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import 'primeicons/primeicons.css';
 
 import Input from './pages/Input';
 import Leaderboard from './pages/Leaderboard';

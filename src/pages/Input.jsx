@@ -20,15 +20,21 @@ const Input = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    const trimmedCarName = carName.trim();
+    const trimmedDriverName = driverName.trim();
+    const trimmedLapTime = lapTime.trim();
+    const trimmedCarType = carType.trim();
+
     const newRecord = {
-      driverName,
-      lapTime,
-      carName,
-      carType,
+      driverName: trimmedDriverName,
+      lapTime: trimmedLapTime,
+      carName: trimmedCarName,
+      carType: trimmedCarType,
       gapToFirst: 'gap'
     };
 
-    sendData(newRecord); // Send new record to the WebSocket context
+    sendData(newRecord);
 
     setCarName('');
     setLapTime('');
