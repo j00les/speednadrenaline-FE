@@ -8,7 +8,7 @@ const ITEMS_PER_PAGE = 4;
 const OverallResult = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [paginatedData, setPaginatedData] = useState([]);
-  const [runsByDriver, setRunsByDriver] = useState(null); 
+  const [runsByDriver, setRunsByDriver] = useState(null);
 
   const totalPages = Math.ceil((runsByDriver?.length || 0) / ITEMS_PER_PAGE);
 
@@ -78,7 +78,7 @@ const OverallResult = () => {
 
                 return (
                   <tr key={`${carName}-${index}`} className="relative">
-                    <td className="pl-4 border-b uppercase border-gray-300 pl-8">{carName}</td>
+                    <td className="border-b uppercase border-gray-300">{carName}</td>
                     <td className="border-b border-gray-300">
                       <div className="flex gap-4 mt-4">
                         {lapTimeChunks.map((chunk, chunkIndex) => (

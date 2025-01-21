@@ -73,8 +73,8 @@ const Overall = () => {
                 const lapTimeChunks = chunkArray(lapTimes, 5);
 
                 return (
-                  <tr key={`${carName}-${index}`} className="relative">
-                    <td className="pl-4 border-b uppercase border-gray-300 pl-8">{carName}</td>
+                  <tr key={`${carName}-${index}`}>
+                    <td className="border-b pl-4 w-[1rem] uppercase border-gray-300">{carName}</td>
                     <td className="border-b border-gray-300">
                       <div className="flex gap-4 mt-4">
                         {lapTimeChunks.map((chunk, chunkIndex) => (
@@ -91,18 +91,15 @@ const Overall = () => {
                                 (runNumber - 5) % 5 === 0; // 5, 10, 15
 
                               return (
-                                <div
-                                  key={runNumber}
-                                  className={`${isGray ? 'bg-gray-100' : ''} p-2`}
-                                >
+                                <div key={runNumber} className={`${isGray ? 'bg-gray-100' : ''} `}>
                                   <li
                                     className={`${
                                       parseFloat(lapTime) === fastestLapTime
-                                        ? 'text-green-500 font-bold'
-                                        : 'text-red-500'
+                                        ? 'text-green-700 font-bold'
+                                        : 'text-black'
                                     }`}
                                   >
-                                    <span className="text-black italic">{`run ${runNumber} `}</span>
+                                    <span className="text-black italic whitespace-nowrap">{`run ${runNumber} `}</span>
                                     <span className="text-black ml-2">
                                       {formatLapTime(lapTime)}
                                     </span>
