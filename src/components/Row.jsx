@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { formatLapTime } from '../util';
 
 const Row = (props) => {
   const { record, index, isLeaderboardRow, isInputRow, isResultRow } = props;
@@ -89,7 +90,9 @@ const Row = (props) => {
           <span className={`w-[.4rem] h-[1.2rem]  ${blockColor}`}></span>
           <span className={`text-[1.3rem] tracking-tight`}>{name}</span>
         </td>
-        <td className="font-titillium text-[1rem] font-semibold text-center">{lapTime}</td>
+        <td className="font-titillium text-[1rem] font-semibold text-center">
+          {formatLapTime(lapTime)}
+        </td>
         <td className="text-[1rem] text-center pr-[.5rem] font-titillium font-semibold">
           {gapToFirst}
         </td>

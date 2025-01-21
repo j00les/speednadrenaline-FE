@@ -10,6 +10,7 @@ import Result from './pages/Result';
 import Fade from './components/Fade';
 import QRCodePage from './pages/QRCode';
 import { WebSocketProvider } from './context/WebSocketContext';
+import OverallResult from './pages/OverallResult';
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState('/overall'); // Track current page
@@ -36,6 +37,7 @@ const App = () => {
         <Route path="/input" element={<Input />} />
         <Route path="/result" element={<Result />} />
         <Route path="/qrcode" element={<QRCodePage />} />
+        <Route path="/overall-result" element={<OverallResult />} />
 
         <Route
           path="/leaderboard"

@@ -1,6 +1,6 @@
 import Row from './Row';
 import logo from '../assets/sa-logo-latest.png';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Table = (props) => {
   const { leaderboardData, isInputTable, isLeaderboardTable, isResultTable } = props;
@@ -10,12 +10,12 @@ const Table = (props) => {
   const itemsPerPage = 10;
 
   // Calculate the total pages
-  const totalPages = Math.ceil(leaderboardData.length / itemsPerPage);
+  const totalPages = Math.ceil(leaderboardData?.length / itemsPerPage);
 
   // Calculate current items to display based on the current page
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = leaderboardData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = leaderboardData?.slice(indexOfFirstItem, indexOfLastItem);
 
   // Handle page change
   const handlePageChange = (direction) => {
@@ -93,7 +93,7 @@ const Table = (props) => {
     <div className="flex justify-center items-center py-10 font-titillium mx-auto px-4 w-full">
       <div className="w-full max-w-4xl bg-white rounded-lg">
         {/* Logo */}
-        <div className="flex justify-center pt-4 mb-6">
+        <div className="flex justify-center pt-4 mb-2">
           <img id="sa-logo" src={logo} alt="SpeedNAdrenaline Logo" className="" />
         </div>
 
@@ -110,7 +110,7 @@ const Table = (props) => {
             </tr>
           </thead>
           <tbody className="text-xs sm:text-sm md:text-base">
-            {currentItems.map((record, index) => (
+            {currentItems?.map((record, index) => (
               <Row
                 key={`${record.name}-${record.carName}-${index}`}
                 record={record}
