@@ -74,13 +74,15 @@ const Overall = () => {
 
                 return (
                   <tr key={`${carName}-${index}`}>
-                    <td className="border-b pl-4 w-[1rem] uppercase border-gray-300">{carName}</td>
+                    <td className="border-b pl-4 w-[1rem] uppercase font-bold border-gray-300">
+                      {carName}
+                    </td>
                     <td className="border-b border-gray-300">
                       <div className="flex gap-4 mt-4">
                         {lapTimeChunks.map((chunk, chunkIndex) => (
                           <ul
                             key={chunkIndex}
-                            className={`list-disc uppercase list-none ${
+                            className={`uppercase list-none ${
                               chunkIndex % 2 === 0 ? 'text-left' : 'text-right'
                             }`}
                           >
@@ -95,14 +97,12 @@ const Overall = () => {
                                   <li
                                     className={`${
                                       parseFloat(lapTime) === fastestLapTime
-                                        ? 'text-green-700 font-bold'
+                                        ? 'text-green-700'
                                         : 'text-black'
                                     }`}
                                   >
-                                    <span className="text-black italic whitespace-nowrap">{`run ${runNumber} `}</span>
-                                    <span className="text-black ml-2">
-                                      {formatLapTime(lapTime)}
-                                    </span>
+                                    <span className="text-black whitespace-nowrap">{`run ${runNumber} `}</span>
+                                    <span className="ml-2">{formatLapTime(lapTime)}</span>
                                   </li>
                                 </div>
                               );

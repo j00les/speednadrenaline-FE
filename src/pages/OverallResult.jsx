@@ -77,14 +77,16 @@ const OverallResult = () => {
                 const lapTimeChunks = chunkArray(lapTimes, 5);
 
                 return (
-                  <tr key={`${carName}-${index}`} className="relative">
-                    <td className="border-b uppercase border-gray-300">{carName}</td>
+                  <tr key={`${carName}-${index}`}>
+                    <td className="border-b pl-4 w-[1rem] font-bold uppercase border-gray-300">
+                      {carName}
+                    </td>
                     <td className="border-b border-gray-300">
                       <div className="flex gap-4 mt-4">
                         {lapTimeChunks.map((chunk, chunkIndex) => (
                           <ul
                             key={chunkIndex}
-                            className={`list-disc uppercase list-none ${
+                            className={`uppercase list-none ${
                               chunkIndex % 2 === 0 ? 'text-left' : 'text-right'
                             }`}
                           >
@@ -95,21 +97,16 @@ const OverallResult = () => {
                                 (runNumber - 5) % 5 === 0; // 5, 10, 15
 
                               return (
-                                <div
-                                  key={runNumber}
-                                  className={`${isGray ? 'bg-gray-100' : ''} p-2`}
-                                >
+                                <div key={runNumber} className={`${isGray ? 'bg-gray-100' : ''} `}>
                                   <li
                                     className={`${
                                       parseFloat(lapTime) === fastestLapTime
-                                        ? 'text-green-500 font-bold'
-                                        : 'text-red-500'
+                                        ? 'text-green-500'
+                                        : 'text-black '
                                     }`}
                                   >
-                                    <span className="text-black italic">{`run ${runNumber} `}</span>
-                                    <span className="text-black ml-2">
-                                      {formatLapTime(lapTime)}
-                                    </span>
+                                    <span className="text-black whitespace-nowrap">{`run ${runNumber} `}</span>
+                                    <span className="ml-2 font-bold">{formatLapTime(lapTime)}</span>
                                   </li>
                                 </div>
                               );
