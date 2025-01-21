@@ -1,9 +1,9 @@
 import Swal from 'sweetalert2';
 import axios from 'axios';
 
-const SaveButton = () => {
-  const API_BASE_URL = 'http://localhost:3000';
+import { API_BASE_URL } from '../constants';
 
+const SaveButton = () => {
   const fetchFromIndexedDB = (storeName) => {
     return new Promise((resolve, reject) => {
       const request = indexedDB.open('WebSocketDataDB');
@@ -43,8 +43,6 @@ const SaveButton = () => {
 
       if (result.isConfirmed) {
         const { status } = await axios.post(`${API_BASE_URL}/api-save-overall`, overallData);
-
-        console.log(overallData, '--debug overallData');
 
         if (status === 200) {
           Swal.fire('Saved!', 'Overall data has been saved successfully.', 'success');
