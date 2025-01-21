@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Dropdown from '../components/Dropdown';
 import Table from '../components/Table';
 import { useWebSocket } from '../context/WebSocketContext';
+import SaveButton from '../components/SaveButton';
 
 const Input = () => {
   const { data: leaderboardData, sendData } = useWebSocket(); // Get leaderboardData from context
@@ -90,6 +91,7 @@ const Input = () => {
             Submit
           </button>
         </form>
+        <SaveButton />
       </div>
       <Table isInputTable leaderboardData={leaderboardData} />
     </div>

@@ -4,7 +4,7 @@ import { formatLapTime } from '../util';
 import { useWebSocket } from '../context/WebSocketContext';
 import overall from '../assets/run-overall.png';
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 4;
 
 const Overall = () => {
   const { runsByDriver } = useWebSocket();
@@ -123,33 +123,27 @@ const Overall = () => {
       </table>
 
       {/* Pagination Controls */}
-      {totalPages > 1 && (
-        <div className="flex justify-between items-center mt-4">
+      {
+        <div className="flex mx-auto w-fit mt-4">
           <button
+            className="flex items-center gap-2 p-2 bg-gray-300 text-red h-fit disabled:opacity-50 text-[.7rem] mt-1 rounded-md"
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className={`px-4 py-2 border ${
-              currentPage === 1 ? 'bg-gray-200 text-gray-500' : 'bg-white text-blue-500'
-            } rounded`}
           >
-            Previous
+            <i className="pi pi-chevron-left"></i>
           </button>
-
-          <span className="text-gray-700">
+          <span className="px-2 sm:px-3 py-1 sm:py-2">
             Page {currentPage} of {totalPages}
           </span>
-
           <button
+            className="flex items-center gap-2 p-2 bg-gray-300 text-red h-fit disabled:opacity-50 text-[.7rem] mt-1 rounded-md"
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className={`px-4 py-2 border ${
-              currentPage === totalPages ? 'bg-gray-200 text-gray-500' : 'bg-white text-blue-500'
-            } rounded`}
           >
-            Next
+            <i className="pi pi-chevron-right"></i>
           </button>
         </div>
-      )}
+      }
     </div>
   );
 };
