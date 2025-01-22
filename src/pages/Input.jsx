@@ -18,7 +18,7 @@ const Input = () => {
   const handleCarNameChange = (event) => setCarName(event.target.value);
   const handleLapTimeChange = (event) => setLapTime(event.target.value);
   const handleDriverNameChange = (event) => setDriverName(event.target.value);
-  const handleCarTypeChange = (event) => setCarType('fwd');
+  const handleCarTypeChange = (event) => setCarType(event.target.value);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -47,7 +47,7 @@ const Input = () => {
   };
 
   return (
-    <div className="flex justify-evenly items-start gap-8 max-w-screen-xl mx-auto pt-24">
+    <div className="flex justify-evenly items-start  max-h-[30rem] gap-8 max-w-screen-xl mx-auto pt-24">
       <div className="flex-1 max-w-md">
         <form id="lapForm" onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
@@ -86,7 +86,7 @@ const Input = () => {
           />
           <button
             type="submit"
-            className="p-3 bg-gray-700 text-white rounded cursor-pointer hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="p-3 bg-gray-700 font-titillium font-semibold uppercase text-[1rem] text-white rounded cursor-pointer hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             Submit
           </button>

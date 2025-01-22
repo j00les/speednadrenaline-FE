@@ -1,7 +1,7 @@
 import Swal from 'sweetalert2';
 import axios from 'axios';
 
-import { API_BASE_URL } from '../constants';
+import { TUNNEL_BASE_URL } from '../constants';
 
 const SaveButton = () => {
   const fetchFromIndexedDB = (storeName) => {
@@ -42,7 +42,7 @@ const SaveButton = () => {
       });
 
       if (result.isConfirmed) {
-        const { status } = await axios.post(`${API_BASE_URL}/api-save-overall`, overallData);
+        const { status } = await axios.post(`${TUNNEL_BASE_URL}/api-save-overall`, overallData);
 
         if (status === 200) {
           Swal.fire('Saved!', 'Overall data has been saved successfully.', 'success');
@@ -69,7 +69,7 @@ const SaveButton = () => {
       });
 
       if (result.isConfirmed) {
-        const { status } = await axios.post(`${API_BASE_URL}/api-save-best-time`, bestTimeData);
+        const { status } = await axios.post(`${TUNNEL_BASE_URL}/api-save-best-time`, bestTimeData);
 
         if (status === 200) {
           Swal.fire('Saved!', 'Best time data has been saved successfully.', 'success');
@@ -83,18 +83,18 @@ const SaveButton = () => {
   };
 
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-4 justify-center pt-2 text-[1rem] font-titillium font-semibold">
       <button
         type="button"
         onClick={handleSaveOverall}
-        className="p-3 bg-red-700 text-white rounded cursor-pointer hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="p-3 bg-green-500 text-white w-[15rem] uppercase rounded cursor-pointer hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
         Save Overall
       </button>
       <button
         type="button"
         onClick={handleSaveBestTime}
-        className="p-3 bg-yellow-700 text-white rounded cursor-pointer hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="p-3 bg-yellow-500 text-white w-[15rem] uppercase rounded cursor-pointer hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
         Save Best Time
       </button>

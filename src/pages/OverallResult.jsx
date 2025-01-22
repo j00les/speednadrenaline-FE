@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import { formatLapTime } from '../util';
-import { API_BASE_URL } from '../constants';
+import { TUNNEL_BASE_URL } from '../constants';
 
 const ITEMS_PER_PAGE = 4;
 
@@ -34,8 +34,8 @@ const OverallResult = () => {
         // Fetch data from the backend
         const {
           data: { data }
-        } = await axios.get(`${API_BASE_URL}/api-get-overall`);
-        setRunsByDriver(data); // Update state with the fetched data
+        } = await axios.get(`${TUNNEL_BASE_URL}/api-get-overall`);
+        setRunsByDriver(data);
       } catch (error) {
         console.log(error);
       }

@@ -1,3 +1,3 @@
-const API_BASE_URL = 'https://pac-ag-warriors-mesa.trycloudflare.com';
+const TUNNEL_BASE_URL = 'https://pac-ag-warriors-mesa.trycloudflare.com';
 
-export { API_BASE_URL };
+export { TUNNEL_BASE_URL };

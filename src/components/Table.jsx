@@ -26,52 +26,56 @@ const Table = (props) => {
     }
   };
 
-  const renderLeaderboardTable = () => (
-    <div className="flex justify-center items-center py-10 font-titillium mx-auto w-[42rem]">
-      <div className="w-full max-w-4xl bg-white rounded-lg">
-        <div className="flex justify-center pt-2 mb-4">
-          <img id="sa-logo" src={logo} alt="SpeedNAdrenaline Logo" />
+  const renderLeaderboardTable = () => {
+    const top20Data = leaderboardData.slice(0, 20);
+    return (
+      <div className="flex justify-center items-center py-10 font-titillium mx-auto w-[42rem]">
+        <div className="w-full max-w-4xl bg-white rounded-lg mx-auto">
+          <div className="flex justify-center pt-2 mb-4">
+            <img id="sa-logo" src={logo} alt="SpeedNAdrenaline Logo" />
+          </div>
+
+          <table className="min-w-full table-fixed text-xl whitespace-nowrap">
+            <thead className="text-2xl">
+              <tr className="bg-[#ff0000] text-white">
+                <th className="text-center rounded-tl-[3px] rounded-bl-[3px]">POSITION</th>
+                <th className="text-center pr-[1rem]">TIME</th>
+                <th className="text-center pr-[.2rem]">
+                  GAP TO 1<sup>st</sup>
+                </th>
+                <th className="text-enter rounded-tr-[3px] rounded-br-[3px] pr-[4rem]">CAR NAME</th>
+              </tr>
+            </thead>
+
+            <tbody className="text-2xl">
+              {top20Data.map((record, index) => (
+                <Row
+                  key={`${record.name}-${record.carName}-${index}`}
+                  record={record}
+                  index={index}
+                  isLeaderboardRow
+                />
+              ))}
+            </tbody>
+          </table>
         </div>
-
-        <table className="min-w-full table-fixed text-xl whitespace-nowrap">
-          <thead className="text-2xl">
-            <tr className="bg-[#ff0000] text-white">
-              <th className="text-center rounded-tl-[3px] rounded-bl-[3px]">POSITION</th>
-              <th className="text-center pr-[1rem]">TIME</th>
-              <th className="text-center pr-[.2rem]">
-                GAP TO 1<sup>st</sup>
-              </th>
-              <th className="text-enter rounded-tr-[3px] rounded-br-[3px] pr-[4rem]">CAR NAME</th>
-            </tr>
-          </thead>
-
-          <tbody className="text-2xl">
-            {leaderboardData.map((record, index) => (
-              <Row
-                key={`${record.name}-${record.carName}-${index}`}
-                record={record}
-                index={index}
-                isLeaderboardRow
-              />
-            ))}
-          </tbody>
-        </table>
       </div>
-    </div>
-  );
+    );
+  };
 
   const renderInputTable = () => (
-    <div className="flex justify-center items-center font-titillium mx-auto w-[42rem]">
-      <div className="w-full max-w-4xl bg-white rounded-lg">
+    <div className="flex justify-center items-center font-titillium mx-auto overflow-auto">
+      <div className="w-full max-w-4xl bg-white rounded-lg overflow-y-auto max-h-[30rem]">
         <table className="min-w-full table-fixed text-xl whitespace-nowrap">
-          <thead className="text-2xl">
+          <thead className="text-[1.4rem] sticky top-0 bg-gray-700 z-10">
             <tr className="bg-gray-700 text-white">
-              <th className="text-center rounded-tl-[3px] rounded-bl-[3px]">POSITION</th>
+              <th className="text-center">POSITION</th>
               <th className="text-center pr-[1rem]">TIME</th>
               <th className="text-center pr-[.2rem]">
                 GAP TO 1<sup>st</sup>
               </th>
-              <th className="text-enter rounded-tr-[3px] rounded-br-[3px] pr-[4rem]">CAR NAME</th>
+              <th className="text-center pr-[2rem]">CAR NAME</th>
+              <th className="text-center rounded-tr-[3px] rounded-br-[3px] w-[2rem]"></th>
             </tr>
           </thead>
           <tbody className="text-2xl">

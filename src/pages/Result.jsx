@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import Table from '../components/Table';
-import { API_BASE_URL } from '../constants';
+import { TUNNEL_BASE_URL } from '../constants';
 
 const Result = () => {
   const [bestTimeData, setBestTimeData] = useState(null);
@@ -12,7 +12,7 @@ const Result = () => {
       try {
         const {
           data: { bestTimeData }
-        } = await axios.get(`${API_BASE_URL}/api-get-best-time`);
+        } = await axios.get(`${TUNNEL_BASE_URL}/api-get-best-time`);
         setBestTimeData(bestTimeData[0].drivers);
       } catch (error) {
         console.log(error);
