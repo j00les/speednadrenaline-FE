@@ -66,7 +66,7 @@ const Table = (props) => {
   const renderInputTable = () => (
     <div className="flex justify-center items-center font-titillium mx-auto overflow-auto">
       <div className="w-full max-w-4xl bg-white rounded-lg overflow-y-auto max-h-[30rem]">
-        <table className="min-w-full table-fixed text-xl whitespace-nowrap">
+        <table className="w-full table-fixed text-xl whitespace-nowrap">
           <thead className="text-[1.4rem] sticky top-0 bg-gray-700 z-10">
             <tr className="bg-gray-700 text-white">
               <th className="text-center">POSITION</th>
@@ -75,7 +75,6 @@ const Table = (props) => {
                 GAP TO 1<sup>st</sup>
               </th>
               <th className="text-center pr-[2rem]">CAR NAME</th>
-              <th className="text-center rounded-tr-[3px] rounded-br-[3px] w-[2rem]"></th>
             </tr>
           </thead>
           <tbody className="text-2xl">

@@ -71,10 +71,6 @@ const Row = (props) => {
         <td className="text-[1.3rem] text-left pl-[1rem] w-[10rem] font-titillium font-semibold">
           {carName}
         </td>
-
-        <td className="text-[1.3rem] text-left w-[2rem] font-titillium font-semibold cursor-pointer">
-          <span className="pi pi-trash text-red-500 "></span>
-        </td>
       </tr>
     );
   };
