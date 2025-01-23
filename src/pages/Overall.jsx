@@ -38,7 +38,7 @@ const Overall = () => {
   };
 
   return (
-    <div className="overflow-x-auto w-[42rem] mx-auto py-10 text-[1rem]">
+    <div className="overflow-x-auto w-full mx-auto mt-[10rem] px-[5rem] text-[1rem]">
       <div className="flex justify-center pt-2 mb-4">
         <img id="sa-logo" src={overall} alt="SpeedNAdrenaline Logo" />
       </div>
@@ -51,8 +51,8 @@ const Overall = () => {
             <React.Fragment key={driverName}>
               {/* Driver Row */}
               <tr className="">
-                <td className="px-4 border-gray-300 font-bernard text-[1.2rem]">
-                  <div className="w-[10rem] flex items-center justify-between text-white uppercase bg-[#ff0000] transform -skew-x-[28deg] mt-4">
+                <td className="px-4 border-gray-300 font-bernard text-[1.5rem]">
+                  <div className="w-[10rem] flex items-center justify-between text-white uppercase bg-[rgb(255,0,0)] transform -skew-x-[28deg] mt-4">
                     <span className="transform skew-x-[28deg] ml-4">{driverName}</span>
                   </div>
                 </td>
@@ -80,7 +80,7 @@ const Overall = () => {
                     <td className="border-b pl-4 w-[1rem] uppercase font-bold border-gray-300">
                       <div className="flex gap-2 items-center">
                         <span className={` h-[1.1rem] px-2 ${getColorForCarType(carType)}`}></span>
-                        <span>{carName}</span>
+                        <span className="text-xl">{carName}</span>
                       </div>
                     </td>
                     <td className="border-b border-gray-300">
@@ -105,8 +105,10 @@ const Overall = () => {
                                         : 'text-black'
                                     }`}
                                   >
-                                    <span className="text-black whitespace-nowrap uppercase">{`run ${runNumber} `}</span>
-                                    <span className="ml-2 font-bold">{formatLapTime(lapTime)}</span>
+                                    <span className="text-black text-xl whitespace-nowrap uppercase">{`run ${runNumber} `}</span>
+                                    <span className="ml-2 text-xl font-bold">
+                                      {formatLapTime(lapTime)}
+                                    </span>
                                   </li>
                                 </div>
                               );
@@ -133,7 +135,7 @@ const Overall = () => {
           >
             <i className="pi pi-chevron-left"></i>
           </button>
-          <span className="px-2 sm:px-3 py-1 sm:py-2">
+          <span className="px-2 sm:px-3 py-1 sm:py-2 ">
             Page {currentPage} of {totalPages}
           </span>
           <button
