@@ -9,7 +9,7 @@ const Dropdown = (props) => {
       value={value}
       onChange={onChange}
       required
-      className="p-3 text-lg border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+      className="p-3 uppercase text-lg border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
     >
       <option value="" disabled>
         {placeholder}

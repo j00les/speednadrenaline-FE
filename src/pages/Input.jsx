@@ -54,34 +54,34 @@ const Input = () => {
             id="driverName"
             value={driverName}
             onChange={handleDriverNameChange}
-            placeholder="Enter Driver Name"
+            placeholder="Driver Name"
             required
-            className="p-3 text-lg border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="p-3 uppercase text-lg border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <input
             type="text"
             id="carName"
             value={carName}
             onChange={handleCarNameChange}
-            placeholder="Enter car name"
+            placeholder="car name"
             required
-            className="p-3 text-lg border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="p-3 uppercase text-lg border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <Dropdown
             options={CAR_OPTIONS}
             value={carType}
             onChange={handleCarTypeChange}
             id="1"
-            placeholder="Select Car Type"
+            placeholder="drivetrain"
           />
           <input
             type="number"
             id="lapTime"
             value={lapTime}
             onChange={handleLapTimeChange}
-            placeholder="Enter lap time (MMDDddd)"
+            placeholder="TIME (MMDDddd)"
             required
-            className="p-3 text-lg border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="p-3  text-lg border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <button
             type="submit"
