@@ -1,3 +1,3 @@
-const TUNNEL_BASE_URL = 'https://closes-light-conceptual-titten.trycloudflare.com';
+const TUNNEL_BASE_URL = 'https://gs-desktop-applicants-baker.trycloudflare.com';
 
 export { TUNNEL_BASE_URL };
