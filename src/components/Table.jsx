@@ -1,9 +1,11 @@
+import Skeleton from 'react-loading-skeleton';
+import { useState } from 'react';
+
 import Row from './Row';
 import logo from '../assets/sa-logo-latest.png';
-import { useEffect, useState } from 'react';
 
 const Table = (props) => {
-  const { leaderboardData, isInputTable, isLeaderboardTable, isResultTable } = props;
+  const { leaderboardData, isInputTable, isLeaderboardTable, isResultTable, loading } = props;
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -95,53 +97,78 @@ const Table = (props) => {
   const renderResultTable = () => (
     <div className="flex justify-center items-center py-10 font-titillium mx-auto px-4 w-full">
       <div className="w-full max-w-4xl bg-white rounded-lg">
-        {/* Logo */}
         <div className="flex justify-center pt-4 mb-2">
-          <img id="sa-logo" src={logo} alt="SpeedNAdrenaline Logo" className="" />
+          {loading ? (
+            <Skeleton width={390} height={80} />
+          ) : (
+            <img id="sa-logo" src={logo} alt="SpeedNAdrenaline Logo" className="" />
+          )}
         </div>
 
-        {/* Responsive Table */}
         <table className="w-full text-xs sm:text-sm md:text-base table-fixed whitespace-normal">
           <thead className="text-sm sm:text-sm md:text-lg">
             <tr className="bg-[#ff0000] text-white">
               <th className="text-center rounded-tl-[3px] rounded-bl-[3px]">POSITION</th>
               <th className="text-center">TIME</th>
-              <th className="text-center px-2 py-2">
+              <th className="text-center">
                 GAP TO 1<sup>st</sup>
               </th>
-              <th className="text-center px-2 py-2 rounded-tr-[3px] rounded-br-[3px]">CAR NAME</th>
+              <th className="text-center rounded-tr-[3px] rounded-br-[3px]">CAR NAME</th>
             </tr>
           </thead>
           <tbody className="text-xs sm:text-sm md:text-base">
-            {currentItems?.map((record, index) => (
-              <Row
-                key={`${record.name}-${record.carName}-${index}`}
-                record={record}
-                index={index + indexOfFirstItem}
-                isResultRow
-              />
-            ))}
+            {loading
+              ? Array.from({ length: 10 }).map((_, idx) => (
+                  <tr key={`skeleton-${idx}`}>
+                    <td className="text-center py-2">
+                      <Skeleton width={80} height={20} />
+                    </td>
+                    <td className="text-center py-2">
+                      <Skeleton width={80} height={20} />
+                    </td>
+                    <td className="text-center py-2">
+                      <Skeleton width={80} height={20} />
+                    </td>
+                    <td className="text-center py-2">
+                      <Skeleton width={80} height={20} />
+                    </td>
+                  </tr>
+                ))
+              : currentItems?.map((record, index) => (
+                  <Row
+                    key={`${record.name}-${record.carName}-${index}`}
+                    record={record}
+                    index={index + indexOfFirstItem}
+                    isResultRow
+                  />
+                ))}
           </tbody>
         </table>
 
         <div className="flex mx-auto w-fit mt-4">
-          <button
-            className="flex items-center gap-2 p-2 bg-gray-300 text-red h-fit disabled:opacity-50 text-[.7rem] mt-1 rounded-md"
-            onClick={() => handlePageChange('prev')}
-            disabled={currentPage === 1}
-          >
-            <i className="pi pi-chevron-left"></i>
-          </button>
-          <span className="px-2 sm:px-3 py-1 sm:py-2">
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            className="flex items-center gap-2 p-2 bg-gray-300 text-red h-fit disabled:opacity-50 text-[.7rem] mt-1 rounded-md"
-            onClick={() => handlePageChange('next')}
-            disabled={currentPage === totalPages}
-          >
-            <i className="pi pi-chevron-right"></i>
-          </button>
+          {loading ? (
+            <Skeleton width={120} height={30} />
+          ) : (
+            <>
+              <button
+                className="flex items-center gap-2 p-2 bg-gray-300 text-red h-fit disabled:opacity-50 text-[.7rem] mt-1 rounded-md"
+                onClick={() => handlePageChange('prev')}
+                disabled={currentPage === 1}
+              >
+                <i className="pi pi-chevron-left"></i>
+              </button>
+              <span className="px-2 sm:px-3 py-1 sm:py-2">
+                Page {currentPage} of {totalPages}
+              </span>
+              <button
+                className="flex items-center gap-2 p-2 bg-gray-300 text-red h-fit disabled:opacity-50 text-[.7rem] mt-1 rounded-md"
+                onClick={() => handlePageChange('next')}
+                disabled={currentPage === totalPages}
+              >
+                <i className="pi pi-chevron-right"></i>
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

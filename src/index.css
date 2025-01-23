@@ -9,3 +9,11 @@
     src: url(/fonts/digital-7-mono.ttf) format('woff2');
   }
 }
+
+@layer base {
+  @font-face {
+    font-family: 'high-mount';
+    font-weight: 900;
+    src: url(/fonts/HighMount-Free.ttf) format('woff2');
+  }
+}

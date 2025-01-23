@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
-import { formatLapTime } from '../util';
+import { formatLapTime, getColorForCarType } from '../util';
 import { useWebSocket } from '../context/WebSocketContext';
-import overall from '../assets/run-overall.png';
+import overall from '../assets/RUN_OVERALL[1].png';
 
 const ITEMS_PER_PAGE = 4;
 
@@ -17,6 +17,7 @@ const Overall = () => {
       driverName,
       cars: Object.entries(cars).map(([carName, lapTimes]) => ({
         carName,
+        carType: lapTimes[0].carType,
         lapTimes
       }))
     }));
@@ -38,6 +39,9 @@ const Overall = () => {
 
   return (
     <div className="overflow-x-auto w-[42rem] mx-auto py-10 text-[1rem]">
+      <div className="flex justify-center pt-2 mb-4">
+        <img id="sa-logo" src={overall} alt="SpeedNAdrenaline Logo" />
+      </div>
       <table className="min-w-full border-collapse table-fixed  border-gray-300 font-titillium">
         <thead className="bg-[#ff0000] text-white">
           <tr></tr>
@@ -47,62 +51,62 @@ const Overall = () => {
             <React.Fragment key={driverName}>
               {/* Driver Row */}
               <tr className="">
-                <td className="px-4  border-gray-300 font-sugo text-[1.2rem]">
+                <td className="px-4  border-gray-300 font-mount text-[1.2rem]">
                   <div className=" w-[10rem] flex items-center justify-between text-white uppercase bg-[#ff0000] transform -skew-x-[28deg] mt-4">
-                    <span className="transform skew-x-12 ml-2">{driverName}</span>
+                    <span className="transform skew-x-[2deg] ml-2">{driverName}</span>
                   </div>
                 </td>
               </tr>
               {/* Expanded Rows for Cars */}
-              {cars.map(({ carName, lapTimes }, index) => {
+              {cars.map(({ carName, lapTimes, carType }, index) => {
                 // Find the fastest lap time
                 const fastestLapTime = Math.min(
                   ...lapTimes.map(({ lapTime }) => parseFloat(lapTime))
                 );
 
-                // Helper function to chunk data into groups of 5
-                const chunkArray = (array, size) => {
-                  const chunks = [];
-                  for (let i = 0; i < array.length; i += size) {
-                    chunks.push(array.slice(i, i + size));
-                  }
-                  return chunks;
+                const chunkArrayIntoColumns = (array, columnCount) => {
+                  const columnChunks = Array.from({ length: columnCount }, () => []);
+                  array.forEach((item, i) => {
+                    columnChunks[i % columnCount].push(item);
+                  });
+                  return columnChunks;
                 };
 
-                // Split lapTimes into chunks of 5
-                const lapTimeChunks = chunkArray(lapTimes, 5);
+                // Split lapTimes into 3 columns
+                const lapTimeColumns = chunkArrayIntoColumns(lapTimes, 3);
 
                 return (
                   <tr key={`${carName}-${index}`}>
                     <td className="border-b pl-4 w-[1rem] uppercase font-bold border-gray-300">
-                      {carName}
+                      <div className="flex gap-2 items-center">
+                        <span className={` h-[1.1rem] px-2 ${getColorForCarType(carType)}`}></span>
+                        <span>{carName}</span>
+                      </div>
                     </td>
                     <td className="border-b border-gray-300">
-                      <div className="flex gap-4 mt-4">
-                        {lapTimeChunks.map((chunk, chunkIndex) => (
-                          <ul
-                            key={chunkIndex}
-                            className={`uppercase list-none ${
-                              chunkIndex % 2 === 0 ? 'text-left' : 'text-right'
-                            }`}
-                          >
-                            {chunk.map(({ lapTime, runNumber }) => {
+                      <div className="flex gap-2 py-4">
+                        {lapTimeColumns.map((column, columnIndex) => (
+                          <ul key={columnIndex} className="list-none text-left flex flex-col gap-2">
+                            {column.map(({ lapTime, runNumber }) => {
                               const isGray =
-                                (runNumber - 1) % 5 === 0 || // 1, 6, 11
-                                (runNumber - 3) % 5 === 0 || // 3, 8, 13
-                                (runNumber - 5) % 5 === 0; // 5, 10, 15
+                                (runNumber - 1) % 6 === 0 || // 1, 7, 13, ..
+                                (runNumber - 2) % 6 === 0 || // 2, 8, 14, ...
+                                (runNumber - 3) % 6 === 0; // 3, 9, 15, ...
 
                               return (
-                                <div key={runNumber} className={`${isGray ? 'bg-gray-100' : ''} `}>
+                                <div
+                                  key={runNumber}
+                                  className={`${isGray ? 'bg-gray-200' : ''} rounded-sm px-1`}
+                                >
                                   <li
                                     className={`${
                                       parseFloat(lapTime) === fastestLapTime
-                                        ? 'text-green-700'
+                                        ? 'text-green-600'
                                         : 'text-black'
                                     }`}
                                   >
-                                    <span className="text-black whitespace-nowrap">{`run ${runNumber} `}</span>
-                                    <span className="ml-2">{formatLapTime(lapTime)}</span>
+                                    <span className="text-black whitespace-nowrap uppercase">{`run ${runNumber} `}</span>
+                                    <span className="ml-2 font-bold">{formatLapTime(lapTime)}</span>
                                   </li>
                                 </div>
                               );

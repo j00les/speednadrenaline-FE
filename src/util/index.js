@@ -4,7 +4,6 @@ const parseLapTime = (rawTime) => {
   const seconds = parseInt(rawTimeString.slice(2, 4), 10); // Next 2 characters for seconds
   const milliseconds = parseInt(rawTimeString.slice(4, 7), 10); // Last 3 characters for milliseconds
 
-  // Validate time segments
   if (seconds >= 60 || milliseconds >= 1000) {
     throw new Error(`Invalid lap time: ${rawTime}`);
   }
@@ -30,15 +29,12 @@ const calculateLapTime = (sortedData) => {
   if (sortedData.length === 0) return [];
 
   return sortedData.map((record) => {
-    // Convert lapTime to milliseconds using parseLapTime
     const lapTimeMilliseconds = parseLapTime(record.lapTime);
-
-    // Format lapTime back to MM:SS.mmm for consistency
     const formattedLapTime = formatLapTime(lapTimeMilliseconds);
 
     return {
       ...record,
-      lapTime: formattedLapTime // Ensure lapTime is properly formatted
+      lapTime: formattedLapTime
     };
   });
 };
@@ -48,4 +44,18 @@ const sortAndCalculateLeaderboard = (data) => {
   return calculateLapTime(sortedData);
 };
 
-export { sortAndCalculateLeaderboard, formatLapTime };
+const getColorForCarType = (carType) => {
+  const convertToUppercase = carType?.toUpperCase();
+  switch (convertToUppercase) {
+    case 'FWD':
+      return 'rounded-[2px] bg-[rgb(0,0,255)]';
+    case 'RWD':
+      return 'rounded-[2px] bg-[rgb(255,0,0)]';
+    case 'AWD':
+      return 'rounded-[2px] bg-[rgb(0,255,0)]';
+    default:
+      return 'bg-gray-500';
+  }
+};
+
+export { sortAndCalculateLeaderboard, formatLapTime, getColorForCarType };

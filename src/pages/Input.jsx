@@ -15,9 +15,9 @@ const Input = () => {
   const [carType, setCarType] = useState('');
   const [recordId, setRecordId] = useState(1); // Initialize auto-incrementing ID
 
-  const handleCarNameChange = (event) => setCarName(event.target.value);
+  const handleCarNameChange = (event) => setCarName('gr yaris 51');
   const handleLapTimeChange = (event) => setLapTime(event.target.value);
-  const handleDriverNameChange = (event) => setDriverName(event.target.value);
+  const handleDriverNameChange = (event) => setDriverName('eel');
   const handleCarTypeChange = (event) => setCarType(event.target.value);
 
   const handleSubmit = (event) => {
@@ -33,8 +33,7 @@ const Input = () => {
       driverName: trimmedDriverName,
       lapTime: trimmedLapTime,
       carName: trimmedCarName,
-      carType: trimmedCarType,
-      gapToFirst: 'gap'
+      carType: trimmedCarType
     };
 
     sendData(newRecord);
@@ -70,7 +69,7 @@ const Input = () => {
           />
           <Dropdown
             options={CAR_OPTIONS}
-            value={'fwd'}
+            value={carType}
             onChange={handleCarTypeChange}
             id="1"
             placeholder="Select Car Type"

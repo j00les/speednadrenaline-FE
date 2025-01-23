@@ -27,8 +27,10 @@ async function deleteIndexedDB(databaseName) {
   try {
     await deleteDB(databaseName);
     console.log(`Database "${databaseName}" deleted successfully.`);
+    return { success: true };
   } catch (error) {
     console.error(`Error deleting database "${databaseName}":`, error);
+    return { success: false, error };
   }
 }
 
@@ -127,6 +129,7 @@ const WebSocketProvider = ({ children }) => {
         const carName = updatedData.carName;
         const lapTime = updatedData.lapTime;
         const id = updatedData.id;
+        const carType = updatedData.carType;
         const uniqueDriverCarKey = `${driverName}-${carName}`;
 
         setData((prevLeaderboard) => {
@@ -141,7 +144,13 @@ const WebSocketProvider = ({ children }) => {
             !leaderboardMap[uniqueDriverCarKey] ||
             lapTime < leaderboardMap[uniqueDriverCarKey].lapTime
           ) {
-            leaderboardMap[uniqueDriverCarKey] = { name: driverName, carName, lapTime, id };
+            leaderboardMap[uniqueDriverCarKey] = {
+              name: driverName,
+              carName,
+              lapTime,
+              id,
+              carType
+            };
           }
 
           // Convert back to an array
@@ -172,10 +181,10 @@ const WebSocketProvider = ({ children }) => {
 
           runsCopy[driverName][carName].push({
             lapTime, // The lap time value
-            runNumber: nextRunNumber // The calculated run number
+            runNumber: nextRunNumber, // The calculated run number
+            carType: carType
           });
 
-          console.log(runsCopy, '--debug runs copy with runNumber');
           return runsCopy;
         });
       } catch (error) {
@@ -218,4 +227,4 @@ const WebSocketProvider = ({ children }) => {
   );
 };
 
-export { useWebSocket, WebSocketProvider };
+export { useWebSocket, WebSocketProvider, deleteIndexedDB };

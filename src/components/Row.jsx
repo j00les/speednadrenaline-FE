@@ -1,25 +1,10 @@
-import { useEffect } from 'react';
-import { formatLapTime } from '../util';
+import { formatLapTime, getColorForCarType } from '../util';
 
 const Row = (props) => {
   const { record, index, isLeaderboardRow, isInputRow, isResultRow } = props;
 
-  const getColorForCarType = (carType) => {
-    switch (carType) {
-      case 'FWD':
-        return 'rounded-[3px] bg-blue-600';
-      case 'RWD':
-        return 'rounded-[3px] bg-[#87CEEB]';
-      case 'AWD':
-        return 'rounded-[3px] bg-[#FF4500]';
-      default:
-        return 'bg-gray-500';
-    }
-  };
-
   const renderLeaderboardRow = () => {
     const { name, carType, gapToFirst, lapTime, carName } = record;
-
     const position = index + 1;
     const positionMargin = position < 10 ? 'ml-[.8rem]' : '';
     const styling = position % 2 === 0 ? 'bg-[#D4D4D4]' : '';
@@ -27,11 +12,11 @@ const Row = (props) => {
 
     return (
       <tr className={`font-sugo uppercase ${styling}`}>
-        <td className={`flex gap-1.5 w-[13rem]`}>
+        <td className={`flex gap-1.5 w-[13rem] items-center`}>
           <span className={`text-[1.4rem] font-titillium font-medium ${positionMargin}`}>
             {position}
           </span>
-          <span className={`w-[.5rem] ${blockColor}`}></span>
+          <span className={`w-[.5rem] h-[1.6rem] my-1 ${blockColor}`}></span>
           <span className={`text-[1.7rem] tracking-tight`}>{name}</span>
         </td>
         <td className="font-titillium text-[1.4rem] font-semibold text-center">{lapTime}</td>
@@ -55,11 +40,13 @@ const Row = (props) => {
 
     return (
       <tr className={`font-titillium uppercase ${styling}`}>
-        <td className={`flex gap-1.5 w-[12rem]`}>
+        <td className={`flex gap-1.5 w-[12rem] items-center`}>
           <span className={`text-[1.3rem] font-titillium font-medium ${positionMargin}`}>
             {position}
           </span>
-          <span className={`w-[.5rem] ${blockColor}`}></span>
+          {/* <span className={`w-[.5rem] ${blockColor}`}></span> */}
+          <span className={`w-[.5rem] h-[1.6rem] my-1 ${blockColor}`}></span>
+
           <span className={`text-[1.26rem] font-semibold tracking-tight`}>{name}</span>
         </td>
         <td className="font-titillium text-[1.3rem] mr-[2rem] font-semibold text-center">
@@ -79,18 +66,18 @@ const Row = (props) => {
     const { name, carType, gapToFirst, lapTime, carName } = record;
 
     const position = index + 1;
-    const positionMargin = position < 10 ? 'ml-[.8rem]' : '';
+    const positionMargin = position < 10 ? 'ml-[.55rem]' : '';
     const styling = position % 2 === 0 ? 'bg-[#D4D4D4]' : '';
     const blockColor = getColorForCarType(carType);
 
     return (
-      <tr className={`font-sugo uppercase text-[1.2rem] ${styling}`}>
-        <td className={`flex gap-1.5  w-[13rem]`}>
-          <span className={`text-[1.2rem] font-titillium font-medium ${positionMargin}`}>
+      <tr className={`font-sugo uppercase ${styling}`}>
+        <td className={`flex gap-1.5 items-center w-[13rem]`}>
+          <span className={`text-[1rem] font-titillium font-medium ${positionMargin}`}>
             {position}
           </span>
-          <span className={`w-[.4rem] h-[1.2rem]  ${blockColor}`}></span>
-          <span className={`text-[1.4rem] tracking-tight`}>{name}</span>
+          <span className={`w-[.4rem] my-[.2rem] h-[1.2rem]  ${blockColor}`}></span>
+          <span className={`text-[1.3rem] tracking-tight`}>{name}</span>
         </td>
         <td className="font-titillium text-[1rem] font-semibold text-center">
           {formatLapTime(lapTime)}
@@ -98,10 +85,13 @@ const Row = (props) => {
         <td className="text-[1rem] text-center pr-[.5rem] font-titillium font-semibold">
           {gapToFirst}
         </td>
-        <td className="">{carName}</td>
+        <td className="text-[1rem] text-center pr-[.5rem] font-titillium font-semibold tracking-tight">
+          {carName}
+        </td>
       </tr>
     );
   };
+
 
   return (
     <>
