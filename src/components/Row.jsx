@@ -6,24 +6,24 @@ const Row = (props) => {
   const renderLeaderboardRow = () => {
     const { name, carType, gapToFirst, lapTime, carName } = record;
     const position = index + 1;
-    const positionMargin = position < 10 ? 'ml-[.8rem]' : '';
-    const styling = position % 2 === 0 ? 'bg-[#D4D4D4]' : '';
+    const positionMargin = position < 10 ? 'ml-[1.25rem]' : '';
+    const styling = position % 2 === 0 ? 'bg-[#D4D4D4] p-[20rem]' : '';
     const blockColor = getColorForCarType(carType);
 
     return (
       <tr className={`font-sugo uppercase ${styling}`}>
-        <td className={`flex gap-1.5 w-[13rem] items-center`}>
-          <span className={`text-[1.4rem] font-titillium font-medium ${positionMargin}`}>
+        <td className={`flex gap-1.5 w-[13rem] p-[1rem] items-center`}>
+          <span className={`text-[2.5rem] font-titillium font-medium ${positionMargin}`}>
             {position}
           </span>
-          <span className={`w-[.5rem] h-[1.6rem] my-1 ${blockColor}`}></span>
-          <span className={`text-[1.7rem] tracking-tight`}>{name}</span>
+          <span className={`p-2 h-[2.7rem] ${blockColor}`}></span>
+          <span className={`text-[2.5rem] tracking-tight`}>{name}</span>
         </td>
-        <td className="font-titillium text-[1.4rem] font-semibold text-center">{lapTime}</td>
-        <td className="text-[1.4rem] text-center pr-[.5rem] font-titillium font-semibold">
+        <td className="font-titillium text-[2.2rem] font-semibold text-center">{lapTime}</td>
+        <td className="text-[2.2rem] text-center pr-[.5rem] font-titillium font-semibold">
           {gapToFirst}
         </td>
-        <td className="text-[1.4rem] text-left pl-[.9rem] font-titillium font-semibold">
+        <td className="text-[2.2rem] text-left pl-[.9rem] font-titillium font-semibold">
           {carName}
         </td>
       </tr>
@@ -91,7 +91,6 @@ const Row = (props) => {
       </tr>
     );
   };
-
 
   return (
     <>

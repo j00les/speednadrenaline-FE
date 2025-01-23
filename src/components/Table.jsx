@@ -31,14 +31,14 @@ const Table = (props) => {
   const renderLeaderboardTable = () => {
     const top20Data = leaderboardData.slice(0, 20);
     return (
-      <div className="flex justify-center items-center py-10 font-titillium mx-auto w-[42rem]">
-        <div className="w-full max-w-4xl bg-white rounded-lg mx-auto">
-          <div className="flex justify-center pt-2 mb-4">
+      <div className="flex justify-center items-center mx-auto py-10 font-titillium w-[50vh]">
+        <div className="w-full  bg-white rounded-lg mx-auto">
+          <div className="flex justify-center pt-2 w-full mb-4">
             <img id="sa-logo" src={logo} alt="SpeedNAdrenaline Logo" />
           </div>
 
           <table className="min-w-full table-fixed text-xl whitespace-nowrap">
-            <thead className="text-2xl">
+            <thead className="text-3xl">
               <tr className="bg-[#ff0000] text-white">
                 <th className="text-center rounded-tl-[3px] rounded-bl-[3px]">POSITION</th>
                 <th className="text-center pr-[1rem]">TIME</th>

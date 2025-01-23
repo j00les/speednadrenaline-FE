@@ -15,9 +15,9 @@ const Input = () => {
   const [carType, setCarType] = useState('');
   const [recordId, setRecordId] = useState(1); // Initialize auto-incrementing ID
 
-  const handleCarNameChange = (event) => setCarName('gr yaris 51');
+  const handleCarNameChange = (event) => setCarName(event.target.value);
   const handleLapTimeChange = (event) => setLapTime(event.target.value);
-  const handleDriverNameChange = (event) => setDriverName('eel');
+  const handleDriverNameChange = (event) => setDriverName(event.target.value);
   const handleCarTypeChange = (event) => setCarType(event.target.value);
 
   const handleSubmit = (event) => {
