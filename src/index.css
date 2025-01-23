@@ -17,3 +17,11 @@
     src: url(/fonts/HighMount-Free.ttf) format('woff2');
   }
 }
+
+@layer base {
+  @font-face {
+    font-family: 'bernard-con';
+    font-weight: 900;
+    src: url(/fonts/BernardMTCondensed.ttf) format('woff2');
+  }
+}

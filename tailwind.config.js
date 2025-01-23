@@ -12,7 +12,8 @@ export default {
       fontFamily: {
         titillium: ['"Titillium Web"', ...defaultTheme.fontFamily.sans],
         sugo: ["'Sugo Pro Display Trial'", ...defaultTheme.fontFamily.sans],
-        mount: ["'high-mount'", ...defaultTheme.fontFamily.sans]
+        mount: ["'high-mount'", ...defaultTheme.fontFamily.sans],
+        bernard: ["'bernard-con'", ...defaultTheme.fontFamily.sans]
       }
     }
   },

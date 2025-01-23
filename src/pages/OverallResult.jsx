@@ -61,9 +61,9 @@ const OverallResult = () => {
             <React.Fragment key={driverName}>
               {/* Driver Row */}
               <tr className="">
-                <td className="px-4 border-gray-300 font-mount text-[1.2rem]">
+                <td className="px-4 border-gray-300 font-bernard text-[1.2rem]">
                   <div className="w-[10rem] flex items-center justify-between text-white uppercase bg-[#ff0000] transform -skew-x-[28deg] mt-4">
-                    <span className="transform skew-x-12 ml-2">{driverName}</span>
+                    <span className="transform skew-x-[28deg] ml-4">{driverName}</span>
                   </div>
                 </td>
               </tr>
