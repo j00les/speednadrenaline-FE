@@ -4,6 +4,43 @@ import { formatLapTime, getColorForCarType } from '../util';
 import { useWebSocket } from '../context/WebSocketContext';
 import overall from '../assets/RUN_OVERALL[1].png';
 
+// const renderLeaderboardTable = () => {
+//   const top20Data = leaderboardData.slice(0, 20);
+//   return (
+//     <div className="w-tv-width h-tv-height mx-auto bg-gray-50 border shadow-md flex flex-col items-center justify-between px-[5rem]">
+//       <div className="bg-white rounded-lg mx-auto">
+//         <div className="flex justify-center pt-2 mb-4">
+//           <img id="sa-logo" src={logo} alt="SpeedNAdrenaline Logo" />
+//         </div>
+
+//         <table className="min-w-full table-fixed text-xl whitespace-nowrap">
+//           <thead className="text-3xl">
+//             <tr className="bg-[#ff0000] text-white py-2">
+//               <th className="text-center rounded-tl-[3px] rounded-bl-[3px]">POSITION</th>
+//               <th className="text-center pr-[1rem]">TIME</th>
+//               <th className="text-center pr-[.2rem]">
+//                 GAP TO 1<sup>st</sup>
+//               </th>
+//               <th className="text-enter rounded-tr-[3px] rounded-br-[3px] pr-[4rem]">CAR NAME</th>
+//             </tr>
+//           </thead>
+
+//           <tbody className="text-2xl">
+//             {top20Data.map((record, index) => (
+//               <Row
+//                 key={`${record.name}-${record.carName}-${index}`}
+//                 record={record}
+//                 index={index}
+//                 isLeaderboardRow
+//               />
+//             ))}
+//           </tbody>
+//         </table>
+//       </div>
+//     </div>
+//   );
+// };
+
 const ITEMS_PER_PAGE = 4;
 
 const Overall = () => {
@@ -38,8 +75,6 @@ const Overall = () => {
   };
 
   return (
-    // <div className="overflow-x-auto w-full mx-auto mt-[10rem] px-[5rem] text-[1rem]">
-
     <div className="w-tv-width h-tv-height mx-auto bg-gray-50 border shadow-md  items-center justify-between px-[5rem]">
       <div className="flex justify-center mt-[5rem] mb-4">
         <img id="sa-logo" src={overall} alt="SpeedNAdrenaline Logo" />
@@ -55,7 +90,7 @@ const Overall = () => {
               <tr className="">
                 <td className="px-4 border-gray-300 font-bernard text-[1.5rem]">
                   <div className="w-[10rem] flex items-center justify-between text-white uppercase bg-[rgb(255,0,0)] transform -skew-x-[28deg] mt-4">
-                    <span className="transform skew-x-[28deg] ml-4">{driverName}</span>
+                    <span className="transform  skew-x-[28deg] ml-4">{driverName}</span>
                   </div>
                 </td>
               </tr>
@@ -82,7 +117,7 @@ const Overall = () => {
                     <td className="border-b pl-4 w-[1rem] uppercase font-bold border-gray-300">
                       <div className="flex gap-2 items-center">
                         <span className={` h-[1.1rem] px-2 ${getColorForCarType(carType)}`}></span>
-                        <span className="text-xl">{carName}</span>
+                        <span className="text-2xl">{carName}</span>
                       </div>
                     </td>
                     <td className="border-b border-gray-300">
@@ -107,8 +142,8 @@ const Overall = () => {
                                         : 'text-black'
                                     }`}
                                   >
-                                    <span className="text-black text-xl whitespace-nowrap uppercase">{`run ${runNumber} `}</span>
-                                    <span className="ml-2 text-xl font-bold">
+                                    <span className="text-black text-2xl whitespace-nowrap uppercase">{`run ${runNumber} `}</span>
+                                    <span className="ml-2 text-2xl font-bold">
                                       {formatLapTime(lapTime)}
                                     </span>
                                   </li>
