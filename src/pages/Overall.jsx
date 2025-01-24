@@ -38,8 +38,10 @@ const Overall = () => {
   };
 
   return (
-    <div className="overflow-x-auto w-full mx-auto mt-[10rem] px-[5rem] text-[1rem]">
-      <div className="flex justify-center pt-2 mb-4">
+    // <div className="overflow-x-auto w-full mx-auto mt-[10rem] px-[5rem] text-[1rem]">
+
+    <div className="w-tv-width h-tv-height mx-auto bg-gray-50 border shadow-md  items-center justify-between px-[5rem]">
+      <div className="flex justify-center mt-[5rem] mb-4">
         <img id="sa-logo" src={overall} alt="SpeedNAdrenaline Logo" />
       </div>
       <table className="min-w-full border-collapse table-fixed  border-gray-300 font-titillium">

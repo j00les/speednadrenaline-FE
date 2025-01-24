@@ -12,11 +12,11 @@ const Row = (props) => {
 
     return (
       <tr className={`font-sugo uppercase ${styling}`}>
-        <td className={`flex gap-1.5 w-[13rem] p-[1rem] items-center`}>
+        <td className={`flex gap-1.5 w-[13rem] p-[.8rem] items-center`}>
           <span className={`text-[2.5rem] font-titillium font-medium ${positionMargin}`}>
             {position}
           </span>
-          <span className={`p-2 h-[2.7rem] ${blockColor}`}></span>
+          <span className={`p-[.4rem] h-[2.7rem] ${blockColor}`}></span>
           <span className={`text-[2.5rem] tracking-tight`}>{name}</span>
         </td>
         <td className="font-titillium text-[2.2rem] font-semibold text-center">{lapTime}</td>
@@ -44,7 +44,6 @@ const Row = (props) => {
           <span className={`text-[1.3rem] font-titillium font-medium ${positionMargin}`}>
             {position}
           </span>
-          {/* <span className={`w-[.5rem] ${blockColor}`}></span> */}
           <span className={`w-[.5rem] h-[1.6rem] my-1 ${blockColor}`}></span>
 
           <span className={`text-[1.26rem] font-semibold tracking-tight`}>{name}</span>
@@ -72,20 +71,20 @@ const Row = (props) => {
 
     return (
       <tr className={`font-sugo uppercase ${styling}`}>
-        <td className={`flex gap-1.5 items-center w-[13rem]`}>
+        <td className={`flex gap-[.2rem] items-center w-[13rem]`}>
           <span className={`text-[1rem] font-titillium font-medium ${positionMargin}`}>
             {position}
           </span>
           <span className={`w-[.4rem] my-[.2rem] h-[1.2rem]  ${blockColor}`}></span>
-          <span className={`text-[1.3rem] tracking-tight`}>{name}</span>
+          <span className={`text-[1rem]`}>{name}</span>
         </td>
-        <td className="font-titillium text-[1rem] font-semibold text-center">
+        <td className="font-titillium pl-[1.3rem] text-[.9rem] tracking-tighter font-semibold text-center">
           {formatLapTime(lapTime)}
         </td>
-        <td className="text-[1rem] text-center pr-[.5rem] font-titillium font-semibold">
+        <td className="text-[.9rem] text-center pr-[.2rem] font-titillium font-semibold">
           {gapToFirst}
         </td>
-        <td className="text-[1rem] text-center pr-[.5rem] font-titillium font-semibold tracking-tight">
+        <td className="text-[.8rem] text-center pr-[.5rem] font-titillium font-semibold tracking-tighter">
           {carName}
         </td>
       </tr>

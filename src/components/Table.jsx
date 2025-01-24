@@ -7,19 +7,15 @@ import logo from '../assets/sa-logo-latest.png';
 const Table = (props) => {
   const { leaderboardData, isInputTable, isLeaderboardTable, isResultTable, loading } = props;
 
-  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 15;
 
-  // Calculate the total pages
   const totalPages = Math.ceil(leaderboardData?.length / itemsPerPage);
 
-  // Calculate current items to display based on the current page
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = leaderboardData?.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Handle page change
   const handlePageChange = (direction) => {
     if (direction === 'next' && currentPage < totalPages) {
       setCurrentPage((prevPage) => prevPage + 1);
@@ -31,15 +27,15 @@ const Table = (props) => {
   const renderLeaderboardTable = () => {
     const top20Data = leaderboardData.slice(0, 20);
     return (
-      <div className="flex justify-center items-center mx-auto py-10 font-titillium w-[50vh]">
-        <div className="w-full  bg-white rounded-lg mx-auto">
-          <div className="flex justify-center pt-2 w-full mb-4">
+      <div className="w-tv-width h-tv-height mx-auto bg-gray-50 border shadow-md flex flex-col items-center justify-between px-[5rem]">
+        <div className="bg-white rounded-lg mx-auto">
+          <div className="flex justify-center pt-2 mb-4">
             <img id="sa-logo" src={logo} alt="SpeedNAdrenaline Logo" />
           </div>
 
           <table className="min-w-full table-fixed text-xl whitespace-nowrap">
             <thead className="text-3xl">
-              <tr className="bg-[#ff0000] text-white">
+              <tr className="bg-[#ff0000] text-white py-2">
                 <th className="text-center rounded-tl-[3px] rounded-bl-[3px]">POSITION</th>
                 <th className="text-center pr-[1rem]">TIME</th>
                 <th className="text-center pr-[.2rem]">
@@ -95,7 +91,7 @@ const Table = (props) => {
   );
 
   const renderResultTable = () => (
-    <div className="flex justify-center items-center py-10 font-titillium mx-auto px-4 w-full">
+    <div className="flex justify-center items-center  font-titillium mx-auto px-4 w-full">
       <div className="w-full max-w-4xl bg-white rounded-lg">
         <div className="flex justify-center pt-4 mb-2">
           {loading ? (
@@ -109,7 +105,7 @@ const Table = (props) => {
           <thead className="text-sm sm:text-sm md:text-lg">
             <tr className="bg-[#ff0000] text-white">
               <th className="text-center rounded-tl-[3px] rounded-bl-[3px]">POSITION</th>
-              <th className="text-center">TIME</th>
+              <th className="text-center pl-[1.4rem]">TIME</th>
               <th className="text-center">
                 GAP TO 1<sup>st</sup>
               </th>
