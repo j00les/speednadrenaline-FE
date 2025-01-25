@@ -1,4 +1,4 @@
-import { formatLapTime, getColorForCarType } from '../util';
+import { formatGapToFirstPlace, formatLapTime, getColorForCarType } from '../util';
 
 const Row = (props) => {
   const { record, index, isLeaderboardRow, isInputRow, isResultRow } = props;
@@ -21,7 +21,7 @@ const Row = (props) => {
         </td>
         <td className="font-titillium text-[2.2rem] font-semibold text-center">{lapTime}</td>
         <td className="text-[2.2rem] text-center pr-[.5rem] font-titillium font-semibold">
-          {gapToFirst}
+          {formatGapToFirstPlace(gapToFirst)}
         </td>
         <td className="text-[2.2rem] text-left pl-[.9rem] font-titillium font-semibold">
           {carName}
@@ -82,7 +82,7 @@ const Row = (props) => {
           {formatLapTime(lapTime)}
         </td>
         <td className="text-[.9rem] text-center pr-[.2rem] font-titillium font-semibold">
-          {gapToFirst}
+          {formatGapToFirstPlace(gapToFirst)}
         </td>
         <td className="text-[.8rem] text-center pr-[.5rem] font-titillium font-semibold tracking-tighter">
           {carName}

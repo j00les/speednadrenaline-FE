@@ -13,6 +13,11 @@ const parseLapTime = (rawTime) => {
   return result;
 };
 
+const formatGapToFirstPlace = (gapInMilliseconds) => {
+  const formattedGap = (gapInMilliseconds / 1000).toFixed(3); // Convert to seconds and format to 3 decimal places
+  return formattedGap.padStart(6, '0'); // Ensure the format is `00.000`
+};
+
 const formatLapTime = (totalMilliseconds) => {
   const minutes = Math.floor(totalMilliseconds / 60000);
   const seconds = Math.floor((totalMilliseconds % 60000) / 1000);
@@ -58,4 +63,10 @@ const getColorForCarType = (carType) => {
   }
 };
 
-export { sortAndCalculateLeaderboard, formatLapTime, getColorForCarType };
+export {
+  sortAndCalculateLeaderboard,
+  formatLapTime,
+  getColorForCarType,
+  parseLapTime,
+  formatGapToFirstPlace
+};

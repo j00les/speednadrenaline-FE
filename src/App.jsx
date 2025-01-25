@@ -18,19 +18,19 @@ const App = () => {
   const [shouldFade, setShouldFade] = useState(false);
   const location = useLocation();
 
-  // useEffect(() => {
-  //   // Toggle between leaderboard and overall every 5 seconds
-  //   const interval = setInterval(() => {
-  //     setShouldFade(true); // Trigger fade-out
-  //     setTimeout(() => {
-  //       // Switch pages after the fade-out effect
-  //       setCurrentPage((prevPage) => (prevPage === '/leaderboard' ? '/overall' : '/leaderboard'));
-  //       setShouldFade(false); // Trigger fade-in
-  //     }, 1000); // Wait for the fade-out to finish before switching
-  //   }, 5000); // Switch every 5 seconds
+  useEffect(() => {
+    // Toggle between leaderboard and overall every 5 seconds
+    const interval = setInterval(() => {
+      setShouldFade(true); // Trigger fade-out
+      setTimeout(() => {
+        // Switch pages after the fade-out effect
+        setCurrentPage((prevPage) => (prevPage === '/leaderboard' ? '/overall' : '/leaderboard'));
+        setShouldFade(false); // Trigger fade-in
+      }, 1000); // Wait for the fade-out to finish before switching
+    }, 10000); // Switch every 5 seconds
 
-  //   return () => clearInterval(interval); // Cleanup interval on unmount
-  // }, []);
+    return () => clearInterval(interval); // Cleanup interval on unmount
+  }, []);
 
   return (
     <WebSocketProvider>
@@ -42,22 +42,22 @@ const App = () => {
 
         <Route
           path="/leaderboard"
-          element={<Leaderboard />}
-          // element={
-          //   <Fade shouldFade={shouldFade}>
-          //     {currentPage === '/leaderboard' ? <Leaderboard /> : <Overall />}
-          //   </Fade>
-          // }
+          // element={<Leaderboard />}
+          element={
+            <Fade shouldFade={shouldFade}>
+              {currentPage === '/leaderboard' ? <Leaderboard /> : <Overall />}
+            </Fade>
+          }
         />
 
         <Route
           path="/overall"
-          element={<Overall />}
-          // element={
-          //   <Fade shouldFade={shouldFade}>
-          //     {currentPage === '/overall' ? <Overall /> : <Leaderboard />}
-          //   </Fade>
-          // }
+          // element={<Overall />}
+          element={
+            <Fade shouldFade={shouldFade}>
+              {currentPage === '/overall' ? <Overall /> : <Leaderboard />}
+            </Fade>
+          }
         />
       </Routes>
     </WebSocketProvider>

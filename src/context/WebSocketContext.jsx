@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { sortAndCalculateLeaderboard } from '../util';
+import { formatLapTime, parseLapTime, sortAndCalculateLeaderboard } from '../util';
 import { openDB, deleteDB } from 'idb';
 
 const WebSocketContext = createContext();
@@ -160,7 +160,7 @@ const WebSocketProvider = ({ children }) => {
           const firstPlaceTime = Math.min(...updatedLeaderboard.map((entry) => entry.lapTime));
           return updatedLeaderboard.map((entry) => ({
             ...entry,
-            gapToFirst: formatGapToFirstPlace(entry.lapTime - firstPlaceTime)
+            gapToFirst: parseLapTime(entry.lapTime) - parseLapTime(firstPlaceTime)
           }));
         });
 

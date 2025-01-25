@@ -56,7 +56,7 @@ const Input = () => {
             onChange={handleDriverNameChange}
             placeholder="Driver Name"
             required
-            className="p-3 uppercase text-lg border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="p-3 text-lg border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <input
             type="text"
@@ -65,7 +65,7 @@ const Input = () => {
             onChange={handleCarNameChange}
             placeholder="car name"
             required
-            className="p-3 uppercase text-lg border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="p-3 text-lg border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <Dropdown
             options={CAR_OPTIONS}

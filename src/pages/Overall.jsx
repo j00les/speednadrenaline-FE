@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { formatLapTime, getColorForCarType } from '../util';
+import { formatLapTime, getColorForCarType, parseLapTime } from '../util';
 import { useWebSocket } from '../context/WebSocketContext';
 import overall from '../assets/RUN_OVERALL[1].png';
 
@@ -144,7 +144,7 @@ const Overall = () => {
                                   >
                                     <span className="text-black text-2xl whitespace-nowrap uppercase">{`run ${runNumber} `}</span>
                                     <span className="ml-2 text-2xl font-bold">
-                                      {formatLapTime(lapTime)}
+                                      {formatLapTime(parseLapTime(lapTime))}
                                     </span>
                                   </li>
                                 </div>

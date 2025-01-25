@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import { formatLapTime, getColorForCarType } from '../util';
+parseLapTime;
+import { formatLapTime, getColorForCarType, parseLapTime } from '../util';
 import { TUNNEL_BASE_URL } from '../constants';
 
 import overall from '../assets/RUN_OVERALL[1].png';
@@ -103,7 +104,9 @@ const OverallResult = () => {
                                 }`}
                               >
                                 <span className="text-black whitespace-nowrap uppercase">{`run ${runNumber}`}</span>
-                                <span className="ml-2 font-bold">{formatLapTime(lapTime)}</span>
+                                <span className="ml-2 font-bold">
+                                  {formatLapTime(parseLapTime(lapTime))}
+                                </span>
                               </span>
                             </div>
                           );

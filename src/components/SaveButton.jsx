@@ -2,7 +2,6 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 
 import { TUNNEL_BASE_URL } from '../constants';
-import { deleteIndexedDB } from '../context/WebSocketContext';
 
 const SaveButton = () => {
   const fetchFromIndexedDB = (storeName) => {
@@ -83,41 +82,15 @@ const SaveButton = () => {
     }
   };
 
-  const handleDeleteData = async () => {
-    try {
-      const result = await Swal.fire({
-        title: 'Delete leaderboard data',
-        text: 'Do you want to save best time data?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, save it!',
-        cancelButtonText: 'Cancel'
-      });
-
-      if (result.isConfirmed) {
-        const { status } = await deleteIndexedDB('WebSocketDataDB');
-        console.log(status);
-
-        if (status === true) {
-          Swal.fire('Saved!', 'Leaderboard data has been saved successfully.', 'success');
-        } else {
-          Swal.fire('Error', 'Failed to save best time data.', 'error');
-        }
-      }
-    } catch (error) {
-      Swal.fire('Error', 'Failed to delete data', 'error');
-    }
-  };
-
   return (
     <div className="flex gap-3 justify-center pt-2 text-[1rem] font-titillium font-semibold">
-      <button
+      {/* <button
         type="button"
         onClick={handleDeleteData}
         className="p-3 bg-red-500 text-white w-[15rem] uppercase rounded cursor-pointer hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
         delete data
-      </button>{' '}
+      </button>{' '} */}
       <button
         type="button"
         onClick={handleSaveOverall}
