@@ -1,3 +1,3 @@
-const TUNNEL_BASE_URL = 'https://bikini-les-employers-cables.trycloudflare.com';
+const TUNNEL_BASE_URL = 'https://exam-whenever-failure-expansion.trycloudflare.com';
 
 export { TUNNEL_BASE_URL };
