@@ -4,21 +4,20 @@ import Dropdown from '../components/Dropdown';
 import Table from '../components/Table';
 import { useWebSocket } from '../context/WebSocketContext';
 import SaveButton from '../components/SaveButton';
+import { CAR_OPTIONS } from '../constants';
 
 const Input = () => {
-  const { data: leaderboardData, sendData } = useWebSocket(); // Get leaderboardData from context
-  const CAR_OPTIONS = ['FWD', 'AWD', 'RWD'];
+  const { leaderboardData, sendData } = useWebSocket();
 
   const [carName, setCarName] = useState('');
   const [driverName, setDriverName] = useState('');
   const [lapTime, setLapTime] = useState('');
-  const [carType, setCarType] = useState('');
-  const [recordId, setRecordId] = useState(1); // Initialize auto-incrementing ID
+  const [driveTrain, setDriveTrain] = useState('');
 
   const handleCarNameChange = (event) => setCarName(event.target.value);
   const handleLapTimeChange = (event) => setLapTime(event.target.value);
   const handleDriverNameChange = (event) => setDriverName(event.target.value);
-  const handleCarTypeChange = (event) => setCarType(event.target.value);
+  const handleDriveTrainChange = (event) => setDriveTrain(event.target.value);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -26,23 +25,21 @@ const Input = () => {
     const trimmedCarName = carName.trim();
     const trimmedDriverName = driverName.trim();
     const trimmedLapTime = lapTime.trim();
-    const trimmedCarType = carType.trim();
+    const trimmedDriveTrain = driveTrain.trim();
 
     const newRecord = {
-      id: recordId,
-      driverName: trimmedDriverName,
-      lapTime: trimmedLapTime,
-      carName: trimmedCarName,
-      carType: trimmedCarType
+      name: trimmedDriverName,
+      time: trimmedLapTime,
+      driveTrain: trimmedDriveTrain,
+      carName: trimmedCarName
     };
 
     sendData(newRecord);
 
-    setRecordId((prevId) => prevId + 1); // Increment the record ID for the next record
     setCarName('');
     setLapTime('');
     setDriverName('');
-    setCarType('');
+    setDriveTrain('');
   };
 
   return (
@@ -69,8 +66,8 @@ const Input = () => {
           />
           <Dropdown
             options={CAR_OPTIONS}
-            value={carType}
-            onChange={handleCarTypeChange}
+            value={driveTrain}
+            onChange={handleDriveTrainChange}
             id="1"
             placeholder="drivetrain"
           />

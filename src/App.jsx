@@ -42,22 +42,22 @@ const App = () => {
 
         <Route
           path="/leaderboard"
-          // element={<Leaderboard />}
-          element={
-            <Fade shouldFade={shouldFade}>
-              {currentPage === '/leaderboard' ? <Leaderboard /> : <Overall />}
-            </Fade>
-          }
+          element={<Leaderboard />}
+          // element={
+          //   <Fade shouldFade={shouldFade}>
+          //     {currentPage === '/leaderboard' ? <Leaderboard /> : <Overall />}
+          //   </Fade>
+          // }
         />
 
         <Route
           path="/overall"
-          // element={<Overall />}
-          element={
-            <Fade shouldFade={shouldFade}>
-              {currentPage === '/overall' ? <Overall /> : <Leaderboard />}
-            </Fade>
-          }
+          element={<Overall />}
+          // element={
+          //   <Fade shouldFade={shouldFade}>
+          //     {currentPage === '/overall' ? <Overall /> : <Leaderboard />}
+          //   </Fade>
+          // }
         />
       </Routes>
     </WebSocketProvider>

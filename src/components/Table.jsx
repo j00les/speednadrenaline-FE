@@ -1,5 +1,5 @@
 import Skeleton from 'react-loading-skeleton';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Row from './Row';
 import logo from '../assets/sa-logo-latest.png';
@@ -24,8 +24,12 @@ const Table = (props) => {
     }
   };
 
+  useEffect(() => {
+    console.log(leaderboardData, '--debug dong');
+  }, []);
+
   const renderLeaderboardTable = () => {
-    const top20Data = leaderboardData.slice(0, 20);
+    const top20Data = leaderboardData?.slice(0, 20);
     return (
       <div className="w-tv-width h-tv-height mx-auto bg-gray-50 border shadow-md flex flex-col items-center justify-between px-[5rem]">
         <div className="bg-white rounded-lg mx-auto">
@@ -46,7 +50,7 @@ const Table = (props) => {
             </thead>
 
             <tbody className="text-2xl">
-              {top20Data.map((record, index) => (
+              {top20Data?.map((record, index) => (
                 <Row
                   key={`${record.name}-${record.carName}-${index}`}
                   record={record}

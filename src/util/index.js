@@ -34,7 +34,7 @@ const calculateLapTime = (sortedData) => {
   if (sortedData.length === 0) return [];
 
   return sortedData.map((record) => {
-    const lapTimeMilliseconds = parseLapTime(record.lapTime);
+    const lapTimeMilliseconds = parseLapTime(record.time);
     const formattedLapTime = formatLapTime(lapTimeMilliseconds);
 
     return {
@@ -45,7 +45,7 @@ const calculateLapTime = (sortedData) => {
 };
 
 const sortAndCalculateLeaderboard = (data) => {
-  const sortedData = [...data].sort((a, b) => parseLapTime(a.lapTime) - parseLapTime(b.lapTime));
+  const sortedData = [...data].sort((a, b) => parseLapTime(a.time) - parseLapTime(b.time));
   return calculateLapTime(sortedData);
 };
 
@@ -70,3 +70,10 @@ export {
   parseLapTime,
   formatGapToFirstPlace
 };
+
+// Gap to first logic
+// const firstPlaceTime = Math.min(...updatedLeaderboard.map((entry) => entry.lapTime));
+// return updatedLeaderboard.map((entry) => ({
+//   ...entry,
+//   gapToFirst: parseLapTime(entry.lapTime) - parseLapTime(firstPlaceTime)
+// }));
