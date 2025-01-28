@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 
-import { parseLapTime, sortAndCalculateLeaderboard } from '../util';
+import { parseLapTime } from '../util';
 import {
   addLeaderboardData,
   deleteIndexedDB,
@@ -35,15 +35,6 @@ const WebSocketProvider = ({ children }) => {
     saveLeadeboardData(setLeaderboardData);
   }, [leaderboardData]);
 
-  // Save `runsByDriver` to IndexedDB whenever it changes
-  // useEffect(() => {
-  //   if (Object.keys(runsByDriver).length > 0) {
-  //     saveRunsToIndexedDB(runsByDriver);
-  //   }
-  // }, [runsByDriver]);
-
-  // Save `data` (leaderboard) to IndexedDB whenever it changes
-
   //socket logic
   useEffect(() => {
     const ws = new WebSocket('ws://localhost:3000');
@@ -56,48 +47,89 @@ const WebSocketProvider = ({ children }) => {
     ws.onmessage = (event) => {
       try {
         const updatedData = JSON.parse(event.data);
-        const driverName = updatedData.driverName;
+        const driverName = updatedData.name;
         const carName = updatedData.carName;
-        const lapTime = updatedData.lapTime;
+        const time = updatedData.time;
         const driveTrain = updatedData.driveTrain;
-        const uniqueDriverCarKey = `${driverName}-${carName}`;
 
-        setLeaderboardData((prevLeaderboard) => {
-          const leaderboardMap = prevLeaderboard.reduce((acc, current) => {
-            const key = `${current.name}-${current.carName}`;
-            acc[key] = current;
-            return acc;
-          }, {});
+        setLeaderboardData((currentLeaderboard) => {
+          const leaderboardMap = {};
 
-          // Convert back to an array
-          const updatedLeaderboard = sortAndCalculateLeaderboard(Object.values(leaderboardMap));
+          // Normalize and add all existing leaderboard entries to the map
+          currentLeaderboard.forEach((entry) => {
+            // Normalize the name and carName for consistency (trim spaces, lowercase)
+            const normalizedDriverName = entry.name.trim().toLowerCase();
+            const normalizedCarName = entry.carName.trim().toLowerCase();
 
+            const uniqueKey = `${normalizedDriverName}-${normalizedCarName}`;
+            leaderboardMap[uniqueKey] = entry;
+          });
+
+          // Create the new entry from the incoming data
+          if (driverName && carName && !isNaN(parseInt(time, 10))) {
+            const normalizedDriverName = driverName.trim().toLowerCase();
+            const normalizedCarName = carName.trim().toLowerCase();
+
+            const uniqueKey = `${normalizedDriverName}-${normalizedCarName}`;
+            const newTime = parseInt(time, 10); // Convert incoming time to a number
+
+            // Only update if the time is faster
+            if (
+              !leaderboardMap[uniqueKey] ||
+              newTime < parseInt(leaderboardMap[uniqueKey].time, 10)
+            ) {
+              const newEntry = {
+                name: driverName,
+                carName,
+                time: String(newTime).padStart(7, '0'), // Ensure uniform format
+                driveTrain
+              };
+
+              leaderboardMap[uniqueKey] = newEntry; // Update the map with the new entry
+            }
+          }
+
+          // Convert map to an array, sort it by time (as a number), and return
+          const updatedLeaderboard = Object.values(leaderboardMap).sort((a, b) => {
+            const timeA = parseInt(a.time, 10); // Parse time as a number
+            const timeB = parseInt(b.time, 10);
+            return timeA - timeB;
+          });
+
+          console.log(updatedLeaderboard, '--debug ');
           return updatedLeaderboard;
         });
 
-        // Update runs by driver with all lap times
-        //     setRunsByDriver((prevRuns) => {
-        //       const runsCopy = { ...prevRuns };
+        // setRunsByDriver((prevRuns) => {
+        //   const runsCopy = { ...prevRuns };
 
-        //       if (!runsCopy[driverName]) {
-        //         runsCopy[driverName] = {};
-        //       }
+        //   // If driver doesn't exist, create an empty object for them
+        //   if (!runsCopy[driverName]) {
+        //     runsCopy[driverName] = {};
+        //   }
 
-        //       if (!runsCopy[driverName][carName]) {
-        //         runsCopy[driverName][carName] = [];
-        //       }
+        //   // If the car doesn't exist under the driver, create an empty array for the car's runs
+        //   if (!runsCopy[driverName][carName]) {
+        //     runsCopy[driverName][carName] = [];
+        //   }
 
-        //       const currentRunCount = runsCopy[driverName][carName].length;
-        //       const nextRunNumber = currentRunCount + 1;
+        //   // Get the number of previous runs for the car and calculate the next run number
+        //   const currentRunCount = runsCopy[driverName][carName].length;
+        //   const nextRunNumber = currentRunCount + 1;
 
-        //       runsCopy[driverName][carName].push({
-        //         lapTime,
-        //         runNumber: nextRunNumber,
-        //         driveTrain: driveTrain
-        //       });
+        //   // Append the new lap data to the car's history
+        //   runsCopy[driverName][carName].push({
+        //     time, // Lap time
+        //     runNumber: nextRunNumber, // Run number
+        //     driveTrain // Drive train type (AWD, FWD, etc.)
+        //   });
 
-        //       return runsCopy;
-        //     });
+        //   // Save the updated data to IndexedDB
+        //   updateRunsInIndexedDB(runsCopy);
+
+        //   // Return the updated state
+        //   return runsCopy;
+        // });
       } catch (error) {
         console.error('Error parsing message data:', error);
       }
@@ -125,7 +157,7 @@ const WebSocketProvider = ({ children }) => {
 
     if (shouldSendMessage) {
       socket.send(parsedMessage);
-      addLeaderboardData(parsedJSON);
+      addLeaderboardData(parsedJSON, setLeaderboardData);
     }
 
     if (!shouldSendMessage) {
@@ -144,3 +176,5 @@ export { useWebSocket, WebSocketProvider };
 
 //provider to wrap the app sot the state is available to all components
 //useWebSocket hook to access the state
+
+// kalo dia sama => patch  the unique key

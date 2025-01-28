@@ -25,7 +25,7 @@ const Table = (props) => {
   };
 
   useEffect(() => {
-    console.log(leaderboardData, '--debug dong');
+    console.log(leaderboardData, '--debug leaderboard');
   }, []);
 
   const renderLeaderboardTable = () => {
