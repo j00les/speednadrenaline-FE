@@ -54,9 +54,9 @@ const getColorForCarType = (carType) => {
   switch (convertToUppercase) {
     case 'FWD':
       return 'rounded-[2px] bg-[rgb(0,0,255)]';
-    case 'RWD':
-      return 'rounded-[2px] bg-[rgb(255,0,0)]';
     case 'AWD':
+      return 'rounded-[2px] bg-[rgb(255,0,0)]';
+    case 'RWD':
       return 'rounded-[2px] bg-[rgb(0,255,0)]';
     default:
       return 'bg-gray-500';

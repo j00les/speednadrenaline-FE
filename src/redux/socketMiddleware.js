@@ -1,8 +1,7 @@
 import { updateRuns, fetchRuns } from './runSlice';
-import { updateLeaderboard } from './leaderboardSlice';
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:3002');
+export const socket = io('http://localhost:3002');
 
 export const webSocketMiddleware = (store) => (next) => (action) => {
   if (action.type === 'websocket/connect') {
@@ -11,9 +10,7 @@ export const webSocketMiddleware = (store) => (next) => (action) => {
 
       // Update Redux store when a new run is added
       store.dispatch(updateRuns(data.runsGrouped));
-      store.dispatch(updateLeaderboard(data.leaderboardEntry));
 
-      // Fetch latest runs from backend (to ensure data is up-to-date)
       store.dispatch(fetchRuns());
     });
 

@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Row from './Row';
 import logo from '../assets/sa-logo-latest.png';
-import { fetchLeaderboard } from '../redux/leaderboardSlice';
-import { connectWebSocket } from '../redux/socketMiddleware';
+import { fetchLeaderboard, updateLeaderboard } from '../redux/leaderboardSlice';
+import { connectWebSocket, socket } from '../redux/socketMiddleware';
 
 const Table = (props) => {
   const dispatch = useDispatch();
@@ -30,15 +30,18 @@ const Table = (props) => {
   };
 
   useEffect(() => {
-    dispatch(fetchLeaderboard());
-  }, [dispatch]);
+    dispatch(fetchLeaderboard()); // ✅ Fetch leaderboard on mount
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      dispatch(fetchLeaderboard());
-    }, 500);
+    // ✅ Listen for WebSocket updates
+    socket.on('runAdded', (data) => {
+      if (!data.leaderboardEntry) return;
 
-    return () => clearInterval(interval);
+      dispatch(updateLeaderboard(data.leaderboardEntry)); // ✅ Dispatch update to Redux
+    });
+
+    return () => {
+      socket.off('runAdded'); // ✅ Cleanup WebSocket listener
+    };
   }, [dispatch]);
 
   const renderLeaderboardTable = () => {
@@ -90,6 +93,7 @@ const Table = (props) => {
                 GAP TO 1<sup>st</sup>
               </th>
               <th className="text-center pr-[2rem]">CAR NAME</th>
+              <th className="text-center pr-[2rem]"></th>
             </tr>
           </thead>
           <tbody className="text-2xl">

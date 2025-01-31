@@ -15,10 +15,10 @@ const Input = () => {
   const [time, setTime] = useState('');
   const [drivetrain, setDriveTrain] = useState('');
 
-  const handleCarNameChange = (event) => setCarName(event.target.value);
-  const handleTimeChange = (event) => setTime(event.target.value);
-  const handleDriverNameChange = (event) => setDriverName(event.target.value);
-  const handleDrivetrainChange = (event) => setDriveTrain(event.target.value);
+  const handleDriverNameChange = (event) => setDriverName('eel');
+  const handleCarNameChange = (event) => setCarName('gr yaris 51');
+  const handleDrivetrainChange = (event) => setDriveTrain('awd');
+  const handleTimeChange = (event) => setTime('0120999');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,8 +27,6 @@ const Input = () => {
     const trimmedCarName = carName.toLowerCase().trim();
     const trimmedTime = time.trim();
     const trimmedDrivetrain = drivetrain.trim();
-
-    console.log(trimmedDrivetrain, 'trimmed');
 
     dispatch(
       sendRun({
@@ -72,7 +70,7 @@ const Input = () => {
           />
           <Dropdown
             options={DRIVETRAIN}
-            value={drivetrain}
+            value={'awd'}
             onChange={handleDrivetrainChange}
             id="1"
             placeholder="drivetrain"

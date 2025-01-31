@@ -1,13 +1,22 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { formatLapTime, formatGapToFirstPlace } from '../util';
 
 const BASE_URL = 'http://localhost:3002';
 
-// Fetch leaderboard from backend
+// ✅ Fetch leaderboard from backend
 export const fetchLeaderboard = createAsyncThunk('leaderboard/fetchLeaderboard', async () => {
   const response = await axios.get(`${BASE_URL}/leaderboard`);
   return response.data;
 });
+
+// ✅ Update leaderboard dynamically (from WebSocket)
+export const updateLeaderboard = createAsyncThunk(
+  'leaderboard/updateLeaderboard',
+  async (newData) => {
+    return newData;
+  }
+);
 
 const leaderboardSlice = createSlice({
   name: 'leaderboard',
@@ -16,31 +25,7 @@ const leaderboardSlice = createSlice({
     status: 'idle',
     error: null
   },
-  reducers: {
-    updateLeaderboard: (state, action) => {
-      const newEntry = action.payload;
-      if (!Array.isArray(newEntry)) {
-        // If updating a single entry, find and replace the existing one
-        const existingIndex = state.leaderboard.findIndex(
-          (entry) => entry.name === newEntry.name && entry.carName === newEntry.carName
-        );
-
-        if (existingIndex !== -1) {
-          // Overwrite if new lap time is better
-          if (
-            parseInt(newEntry.lapTime, 10) < parseInt(state.leaderboard[existingIndex].lapTime, 10)
-          ) {
-            state.leaderboard[existingIndex] = newEntry;
-          }
-        } else {
-          // Otherwise, add a new entry
-          state.leaderboard.push(newEntry);
-        }
-      } else {
-        state.leaderboard = newEntry;
-      }
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchLeaderboard.pending, (state) => {
@@ -48,14 +33,36 @@ const leaderboardSlice = createSlice({
       })
       .addCase(fetchLeaderboard.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.leaderboard = action.payload;
+        state.leaderboard = recalculateGapToFirst(action.payload);
       })
       .addCase(fetchLeaderboard.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message;
+      })
+      .addCase(updateLeaderboard.fulfilled, (state, action) => {
+        state.leaderboard = recalculateGapToFirst(action.payload);
       });
   }
 });
 
-export const { updateLeaderboard } = leaderboardSlice.actions;
+// ✅ Helper function to recalculate `gapToFirst` every time the leaderboard updates
+const recalculateGapToFirst = (leaderboard) => {
+  if (!leaderboard || leaderboard.length === 0) return [];
+
+  // ✅ Sort leaderboard by best time (ascending order)
+  const sortedLeaderboard = [...leaderboard].sort(
+    (a, b) => parseInt(a.time, 10) - parseInt(b.time, 10)
+  );
+
+  // ✅ Get first place time (fastest time)
+  const firstPlaceTime = parseInt(sortedLeaderboard[0].time, 10) || 0;
+
+  // ✅ Recalculate `gapToFirst` for each entry
+  return sortedLeaderboard.map((entry) => ({
+    ...entry,
+    time: formatLapTime(parseInt(entry.time, 10)), // ✅ Format lap time
+    gapToFirst: formatGapToFirstPlace(Math.max(0, parseInt(entry.time, 10) - firstPlaceTime)) // ✅ Compute & format gap
+  }));
+};
+
 export default leaderboardSlice.reducer;

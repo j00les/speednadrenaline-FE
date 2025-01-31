@@ -179,17 +179,17 @@ const App = () => {
     dispatch(connectWebSocket()); // ✅ Start WebSocket on App Load
   }, [dispatch]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setShouldFade(true); // Trigger fade-out
-      setTimeout(() => {
-        setCurrentPage((prevPage) => (prevPage === '/leaderboard' ? '/overall' : '/leaderboard'));
-        setShouldFade(false); // Trigger fade-in
-      }, 1000); // Wait for the fade-out to finish before switching
-    }, 10000); // Switch every 5 seconds
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setShouldFade(true); // Trigger fade-out
+  //     setTimeout(() => {
+  //       setCurrentPage((prevPage) => (prevPage === '/leaderboard' ? '/overall' : '/leaderboard'));
+  //       setShouldFade(false); // Trigger fade-in
+  //     }, 1000); // Wait for the fade-out to finish before switching
+  //   }, 10000); // Switch every 5 seconds
 
-    return () => clearInterval(interval); // Cleanup interval on unmount
-  }, []);
+  //   return () => clearInterval(interval); // Cleanup interval on unmount
+  // }, []);
 
   return (
     <Routes location={location}>
