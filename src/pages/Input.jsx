@@ -23,8 +23,8 @@ const Input = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const trimmedCarName = carName.trim();
-    const trimmedDriverName = driverName.trim();
+    const trimmedCarName = carName.toLowerCase().trim();
+    const trimmedDriverName = driverName.toLowerCase().trim();
     const trimmedLapTime = lapTime.trim();
     const trimmedCarType = carType.trim();
 
