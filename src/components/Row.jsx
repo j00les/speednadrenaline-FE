@@ -4,11 +4,11 @@ const Row = (props) => {
   const { record, index, isLeaderboardRow, isInputRow, isResultRow } = props;
 
   const renderLeaderboardRow = () => {
-    const { name, carType, gapToFirst, lapTime, carName } = record;
+    const { name, drivetrain, gapToFirst, time, carName } = record;
     const position = index + 1;
     const positionMargin = position < 10 ? 'ml-[1.25rem]' : '';
     const styling = position % 2 === 0 ? 'bg-[#D4D4D4] p-[20rem]' : '';
-    const blockColor = getColorForCarType(carType);
+    const blockColor = getColorForCarType(drivetrain);
 
     return (
       <tr className={`font-sugo uppercase ${styling}`}>
@@ -19,7 +19,7 @@ const Row = (props) => {
           <span className={`p-[.4rem] h-[2.7rem] ${blockColor}`}></span>
           <span className={`text-[2.5rem] tracking-tight`}>{name}</span>
         </td>
-        <td className="font-titillium text-[2.2rem] font-semibold text-center">{lapTime}</td>
+        <td className="font-titillium text-[2.2rem] font-semibold text-center">{time}</td>
         <td className="text-[2.2rem] text-center pr-[.5rem] font-titillium font-semibold">
           {formatGapToFirstPlace(gapToFirst)}
         </td>
@@ -31,12 +31,13 @@ const Row = (props) => {
   };
 
   const renderInputRow = () => {
-    const { name, carType, gapToFirst, lapTime, carName } = record;
+    const { name, drivetrain, gapToFirst, time, carName } = record;
+    console.log(record, '--debut');
 
     const position = index + 1;
     const positionMargin = position < 10 ? 'ml-[.8rem]' : '';
     const styling = position % 2 === 0 ? 'bg-[#D4D4D4]' : '';
-    const blockColor = getColorForCarType(carType);
+    const blockColor = getColorForCarType(drivetrain);
 
     return (
       <tr className={`font-titillium uppercase ${styling}`}>
@@ -48,9 +49,7 @@ const Row = (props) => {
 
           <span className={`text-[1.26rem] font-semibold tracking-tight`}>{name}</span>
         </td>
-        <td className="font-titillium text-[1.3rem] mr-[2rem] font-semibold text-center">
-          {lapTime}
-        </td>
+        <td className="font-titillium text-[1.3rem] mr-[2rem] font-semibold text-center">{time}</td>
         <td className="text-[1.3rem] text-center pr-[.5rem] font-titillium font-semibold">
           {gapToFirst}
         </td>

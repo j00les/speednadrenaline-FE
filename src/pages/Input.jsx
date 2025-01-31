@@ -1,49 +1,52 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Dropdown from '../components/Dropdown';
 import Table from '../components/Table';
-import { useWebSocket } from '../context/WebSocketContext';
 import SaveButton from '../components/SaveButton';
+import { useDispatch } from 'react-redux';
+import { sendRun } from '../redux/socketMiddleware';
+import { DRIVETRAIN } from '../constants';
 
 const Input = () => {
-  const { data: leaderboardData, sendData } = useWebSocket(); // Get leaderboardData from context
-  const CAR_OPTIONS = ['FWD', 'AWD', 'RWD'];
+  const dispatch = useDispatch();
 
   const [carName, setCarName] = useState('');
   const [driverName, setDriverName] = useState('');
-  const [lapTime, setLapTime] = useState('');
-  const [carType, setCarType] = useState('');
-  const [recordId, setRecordId] = useState(1); // Initialize auto-incrementing ID
+  const [time, setTime] = useState('');
+  const [drivetrain, setDriveTrain] = useState('');
 
   const handleCarNameChange = (event) => setCarName(event.target.value);
-  const handleLapTimeChange = (event) => setLapTime(event.target.value);
+  const handleTimeChange = (event) => setTime(event.target.value);
   const handleDriverNameChange = (event) => setDriverName(event.target.value);
-  const handleCarTypeChange = (event) => setCarType(event.target.value);
+  const handleDrivetrainChange = (event) => setDriveTrain(event.target.value);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-    const trimmedCarName = carName.toLowerCase().trim();
     const trimmedDriverName = driverName.toLowerCase().trim();
-    const trimmedLapTime = lapTime.trim();
-    const trimmedCarType = carType.trim();
+    const trimmedCarName = carName.toLowerCase().trim();
+    const trimmedTime = time.trim();
+    const trimmedDrivetrain = drivetrain.trim();
 
-    const newRecord = {
-      id: recordId,
-      driverName: trimmedDriverName,
-      lapTime: trimmedLapTime,
-      carName: trimmedCarName,
-      carType: trimmedCarType
-    };
+    console.log(trimmedDrivetrain, 'trimmed');
 
-    sendData(newRecord);
+    dispatch(
+      sendRun({
+        name: trimmedDriverName,
+        carName: trimmedCarName,
+        time: trimmedTime,
+        drivetrain: trimmedDrivetrain
+      })
+    );
 
-    setRecordId((prevId) => prevId + 1); // Increment the record ID for the next record
-    setCarName('');
-    setLapTime('');
     setDriverName('');
-    setCarType('');
+    setCarName('');
+    setTime('');
+    setDriveTrain('');
   };
+  useEffect(() => {
+    console.log(drivetrain);
+  }, []);
 
   return (
     <div className="flex justify-evenly items-start  max-h-[30rem] gap-8 max-w-screen-xl mx-auto pt-24">
@@ -68,17 +71,17 @@ const Input = () => {
             className="p-3 text-lg border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <Dropdown
-            options={CAR_OPTIONS}
-            value={carType}
-            onChange={handleCarTypeChange}
+            options={DRIVETRAIN}
+            value={drivetrain}
+            onChange={handleDrivetrainChange}
             id="1"
             placeholder="drivetrain"
           />
           <input
             type="number"
-            id="lapTime"
-            value={lapTime}
-            onChange={handleLapTimeChange}
+            id="time"
+            value={time}
+            onChange={handleTimeChange}
             placeholder="TIME (MMDDddd)"
             required
             className="p-3  text-lg border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -92,7 +95,7 @@ const Input = () => {
         </form>
         <SaveButton />
       </div>
-      <Table isInputTable leaderboardData={leaderboardData} />
+      <Table isInputTable />
     </div>
   );
 };

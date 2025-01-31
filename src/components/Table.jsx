@@ -1,20 +1,25 @@
 import Skeleton from 'react-loading-skeleton';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Row from './Row';
 import logo from '../assets/sa-logo-latest.png';
+import { fetchLeaderboard } from '../redux/leaderboardSlice';
+import { connectWebSocket } from '../redux/socketMiddleware';
 
 const Table = (props) => {
-  const { leaderboardData, isInputTable, isLeaderboardTable, isResultTable, loading } = props;
+  const dispatch = useDispatch();
+  const { isInputTable, isLeaderboardTable, isResultTable, loading } = props;
+  const { leaderboard } = useSelector((state) => state.leaderboard);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
 
-  const totalPages = Math.ceil(leaderboardData?.length / itemsPerPage);
+  const totalPages = Math.ceil(leaderboard?.length / itemsPerPage);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = leaderboardData?.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = leaderboard?.slice(indexOfFirstItem, indexOfLastItem);
 
   const handlePageChange = (direction) => {
     if (direction === 'next' && currentPage < totalPages) {
@@ -24,8 +29,20 @@ const Table = (props) => {
     }
   };
 
+  useEffect(() => {
+    dispatch(fetchLeaderboard());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      dispatch(fetchLeaderboard());
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, [dispatch]);
+
   const renderLeaderboardTable = () => {
-    const top20Data = leaderboardData.slice(0, 20);
+    const top20Data = leaderboard.slice(0, 20);
     return (
       <div className="w-tv-width h-tv-height mx-auto bg-gray-50 border shadow-md flex flex-col items-center justify-between px-[5rem]">
         <div className="bg-white rounded-lg mx-auto">
@@ -76,7 +93,7 @@ const Table = (props) => {
             </tr>
           </thead>
           <tbody className="text-2xl">
-            {leaderboardData.map((record, index) => (
+            {leaderboard.map((record, index) => (
               <Row
                 key={`${record.name}-${record.carName}-${index}`}
                 record={record}

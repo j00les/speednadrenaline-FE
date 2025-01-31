@@ -1,45 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 import { formatLapTime, getColorForCarType, parseLapTime } from '../util';
-import { useWebSocket } from '../context/WebSocketContext';
 import overall from '../assets/RUN_OVERALL[1].png';
 
-// const renderLeaderboardTable = () => {
-//   const top20Data = leaderboardData.slice(0, 20);
-//   return (
-//     <div className="w-tv-width h-tv-height mx-auto bg-gray-50 border shadow-md flex flex-col items-center justify-between px-[5rem]">
-//       <div className="bg-white rounded-lg mx-auto">
-//         <div className="flex justify-center pt-2 mb-4">
-//           <img id="sa-logo" src={logo} alt="SpeedNAdrenaline Logo" />
-//         </div>
-
-//         <table className="min-w-full table-fixed text-xl whitespace-nowrap">
-//           <thead className="text-3xl">
-//             <tr className="bg-[#ff0000] text-white py-2">
-//               <th className="text-center rounded-tl-[3px] rounded-bl-[3px]">POSITION</th>
-//               <th className="text-center pr-[1rem]">TIME</th>
-//               <th className="text-center pr-[.2rem]">
-//                 GAP TO 1<sup>st</sup>
-//               </th>
-//               <th className="text-enter rounded-tr-[3px] rounded-br-[3px] pr-[4rem]">CAR NAME</th>
-//             </tr>
-//           </thead>
-
-//           <tbody className="text-2xl">
-//             {top20Data.map((record, index) => (
-//               <Row
-//                 key={`${record.name}-${record.carName}-${index}`}
-//                 record={record}
-//                 index={index}
-//                 isLeaderboardRow
-//               />
-//             ))}
-//           </tbody>
-//         </table>
-//       </div>
-//     </div>
-//   );
-// };
 
 const ITEMS_PER_PAGE = 4;
 
