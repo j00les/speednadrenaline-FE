@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Provider } from 'react-redux';
 
 import { fetchRuns } from './redux/runSlice';
 import { fetchLeaderboard } from './redux/leaderboardSlice';
-import { socket, WebSocketProvider } from './provider/WebSocketProvider';
-import store from './redux/store';
+import { connectWebSocket, sendRun } from './redux/socketMiddleware';
 
 const RunInputPage = () => {
+  const dispatch = useDispatch();
   const [name, setName] = useState('');
   const [carName, setCarName] = useState('');
   const [lapTime, setLapTime] = useState('');
@@ -17,18 +16,17 @@ const RunInputPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const newRun = {
-      name,
-      carName,
-      lapTime,
-      carType,
-      driveTrain,
-      time: new Date().toISOString() // Save timestamp
-    };
+    dispatch(
+      sendRun({
+        name,
+        carName,
+        lapTime,
+        carType,
+        driveTrain,
+        time: new Date().toISOString()
+      })
+    );
 
-    socket.emit('addRun', newRun);
-
-    // Clear inputs
     setName('');
     setCarName('');
     setLapTime('');
@@ -40,46 +38,41 @@ const RunInputPage = () => {
     <div>
       <h1>Submit a New Run</h1>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Driver Name:</label>
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
-        </div>
-        <div>
-          <label>Car Name:</label>
-          <input
-            type="text"
-            value={carName}
-            onChange={(e) => setCarName(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Lap Time (ms):</label>
-          <input
-            type="number"
-            value={lapTime}
-            onChange={(e) => setLapTime(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Car Type:</label>
-          <input
-            type="text"
-            value={carType}
-            onChange={(e) => setCarType(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Drive Train:</label>
-          <input
-            type="text"
-            value={driveTrain}
-            onChange={(e) => setDriveTrain(e.target.value)}
-            required
-          />
-        </div>
+        <input
+          type="text"
+          placeholder="Driver Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Car Name"
+          value={carName}
+          onChange={(e) => setCarName(e.target.value)}
+          required
+        />
+        <input
+          type="number"
+          placeholder="Lap Time (ms)"
+          value={lapTime}
+          onChange={(e) => setLapTime(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Car Type"
+          value={carType}
+          onChange={(e) => setCarType(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Drive Train"
+          value={driveTrain}
+          onChange={(e) => setDriveTrain(e.target.value)}
+          required
+        />
         <button type="submit">Submit Run</button>
       </form>
     </div>
@@ -166,14 +159,18 @@ const LeaderboardPage = () => {
 };
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(connectWebSocket()); // ✅ Start WebSocket on App Load
+  }, [dispatch]);
+
   return (
-    <Provider store={store}>
-      <WebSocketProvider>
-        <RunInputPage />
-        <LeaderboardPage />
-        <OverallPage />
-      </WebSocketProvider>
-    </Provider>
+    <>
+      <RunInputPage />
+      <LeaderboardPage />
+      <OverallPage />
+    </>
   );
 };
 
