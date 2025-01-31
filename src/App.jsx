@@ -1,66 +1,179 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import 'primeicons/primeicons.css';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Provider } from 'react-redux';
 
-import Input from './pages/Input';
-import Leaderboard from './pages/Leaderboard';
-import Overall from './pages/Overall';
-import Result from './pages/Result';
+import { fetchRuns } from './redux/runSlice';
+import { fetchLeaderboard } from './redux/leaderboardSlice';
+import { socket, WebSocketProvider } from './provider/WebSocketProvider';
+import store from './redux/store';
 
-import 'react-loading-skeleton/dist/skeleton.css';
-import Fade from './components/Fade';
-import QRCodePage from './pages/QRCode';
-import { WebSocketProvider } from './context/WebSocketContext';
-import OverallResult from './pages/OverallResult';
+const RunInputPage = () => {
+  const [name, setName] = useState('');
+  const [carName, setCarName] = useState('');
+  const [lapTime, setLapTime] = useState('');
+  const [carType, setCarType] = useState('');
+  const [driveTrain, setDriveTrain] = useState('');
 
-const App = () => {
-  const [currentPage, setCurrentPage] = useState('/overall'); // Track current page
-  const [shouldFade, setShouldFade] = useState(false);
-  const location = useLocation();
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  useEffect(() => {
-    // Toggle between leaderboard and overall every 5 seconds
-    const interval = setInterval(() => {
-      setShouldFade(true); // Trigger fade-out
-      setTimeout(() => {
-        // Switch pages after the fade-out effect
-        setCurrentPage((prevPage) => (prevPage === '/leaderboard' ? '/overall' : '/leaderboard'));
-        setShouldFade(false); // Trigger fade-in
-      }, 1000); // Wait for the fade-out to finish before switching
-    }, 10000); // Switch every 5 seconds
+    const newRun = {
+      name,
+      carName,
+      lapTime,
+      carType,
+      driveTrain,
+      time: new Date().toISOString() // Save timestamp
+    };
 
-    return () => clearInterval(interval); // Cleanup interval on unmount
-  }, []);
+    socket.emit('addRun', newRun);
+
+    // Clear inputs
+    setName('');
+    setCarName('');
+    setLapTime('');
+    setCarType('');
+    setDriveTrain('');
+  };
 
   return (
-    <WebSocketProvider>
-      <Routes location={location}>
-        <Route path="/input" element={<Input />} />
-        <Route path="/result" element={<Result />} />
-        <Route path="/qrcode" element={<QRCodePage />} />
-        <Route path="/overall-result" element={<OverallResult />} />
+    <div>
+      <h1>Submit a New Run</h1>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Driver Name:</label>
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+        </div>
+        <div>
+          <label>Car Name:</label>
+          <input
+            type="text"
+            value={carName}
+            onChange={(e) => setCarName(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Lap Time (ms):</label>
+          <input
+            type="number"
+            value={lapTime}
+            onChange={(e) => setLapTime(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Car Type:</label>
+          <input
+            type="text"
+            value={carType}
+            onChange={(e) => setCarType(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Drive Train:</label>
+          <input
+            type="text"
+            value={driveTrain}
+            onChange={(e) => setDriveTrain(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit">Submit Run</button>
+      </form>
+    </div>
+  );
+};
 
-        <Route
-          path="/leaderboard"
-          // element={<Leaderboard />}
-          element={
-            <Fade shouldFade={shouldFade}>
-              {currentPage === '/leaderboard' ? <Leaderboard /> : <Overall />}
-            </Fade>
-          }
-        />
+const OverallPage = () => {
+  const dispatch = useDispatch();
+  const { runsByDriver } = useSelector((state) => state.runs);
 
-        <Route
-          path="/overall"
-          // element={<Overall />}
-          element={
-            <Fade shouldFade={shouldFade}>
-              {currentPage === '/overall' ? <Overall /> : <Leaderboard />}
-            </Fade>
-          }
-        />
-      </Routes>
-    </WebSocketProvider>
+  useEffect(() => {
+    dispatch(fetchRuns()); // Fetch once when the component loads
+  }, [dispatch]);
+
+  return (
+    <div>
+      <h1>Overall Runs</h1>
+      {runsByDriver.length > 0 ? (
+        runsByDriver?.map((driver) => (
+          <div key={`driver-${driver.name}`}>
+            <h2>{driver.name}</h2> {/* Driver Name */}
+            {driver.cars?.map((car) => (
+              <div key={`car-${driver.name}-${car.carName}`} style={{ marginLeft: '20px' }}>
+                <h3>{car.carName}</h3> {/* Car Name */}
+                <ul>
+                  {car.runs?.map((run, index) => (
+                    <li key={`run-${driver.name}-${car.carName}-${index}`}>
+                      Run {run.runNumber}: {run.lapTime} ms
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        ))
+      ) : (
+        <p>Loading...</p>
+      )}
+    </div>
+  );
+};
+
+const LeaderboardPage = () => {
+  const dispatch = useDispatch();
+  const { leaderboard, status } = useSelector((state) => state.leaderboard);
+
+  useEffect(() => {
+    if (status === 'idle') {
+      dispatch(fetchLeaderboard());
+    }
+  }, [dispatch, status]);
+
+  return (
+    <div>
+      <h1>Live Leaderboard</h1>
+      {leaderboard.length > 0 ? (
+        <table border="1">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Driver</th>
+              <th>Car</th>
+              <th>Lap Time (ms)</th>
+              <th>Gap to First (ms)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {leaderboard.map((entry, index) => (
+              <tr key={`${entry.name}-${entry.carName}-${entry.lapTime}`}>
+                <td>{index + 1}</td>
+                <td>{entry.name}</td>
+                <td>{entry.carName}</td>
+                <td>{entry.lapTime}</td>
+                <td>{entry.gapToFirst}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p>Loading...</p>
+      )}
+    </div>
+  );
+};
+
+const App = () => {
+  return (
+    <Provider store={store}>
+      <WebSocketProvider>
+        <RunInputPage />
+        <LeaderboardPage />
+        <OverallPage />
+      </WebSocketProvider>
+    </Provider>
   );
 };
 
