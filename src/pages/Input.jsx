@@ -16,9 +16,9 @@ const Input = () => {
   const [drivetrain, setDriveTrain] = useState('');
 
   const handleDriverNameChange = (event) => setDriverName('eel');
-  const handleCarNameChange = (event) => setCarName('gr yaris 51');
+  const handleCarNameChange = (event) => setCarName('brio');
   const handleDrivetrainChange = (event) => setDriveTrain('awd');
-  const handleTimeChange = (event) => setTime('0120999');
+  const handleTimeChange = (event) => setTime(event.target.value);
 
   const handleSubmit = (e) => {
     e.preventDefault();
