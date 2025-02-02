@@ -101,9 +101,9 @@ export const fetchRuns = createAsyncThunk('runs/fetchRuns', async () => {
 // ✅ Delete a specific run
 export const deleteRun = createAsyncThunk('runs/deleteRun', async ({ name, carName, time }) => {
   await axios.delete(`${BASE_URL}/deleteRun`, {
-    data: { name, carName, time }
+    params: { name, carName, time } // ✅ Use query parameters instead of `body`
   });
-  return { name, carName, time }; // ✅ Return deleted run details for state update
+  return { name, carName, time };
 });
 
 const runsSlice = createSlice({
