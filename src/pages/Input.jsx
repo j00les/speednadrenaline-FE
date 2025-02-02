@@ -42,9 +42,6 @@ const Input = () => {
     setTime('');
     setDriveTrain('');
   };
-  useEffect(() => {
-    console.log(drivetrain);
-  }, []);
 
   return (
     <div className="flex justify-evenly items-start  max-h-[30rem] gap-8 max-w-screen-xl mx-auto pt-24">

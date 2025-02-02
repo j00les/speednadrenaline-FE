@@ -5,7 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import Row from './Row';
 import logo from '../assets/sa-logo-latest.png';
 import { fetchLeaderboard, updateLeaderboard } from '../redux/leaderboardSlice';
-import { connectWebSocket, socket } from '../redux/socketMiddleware';
+import { socket } from '../redux/socketMiddleware';
+import { fetchRuns, updateRuns } from '../redux/runSlice';
+import { formatLapTime } from '../util';
 
 const Table = (props) => {
   const dispatch = useDispatch();
@@ -29,18 +31,30 @@ const Table = (props) => {
     }
   };
 
+  // useEffect(() => {
+  //   console.log(formatLapTime(102333)); // Expected: "01:42.333"
+  //   console.log(formatLapTime(12345)); // Expected: "00:12.345"
+  //   console.log(formatLapTime(9876)); // Expected: "00:09.876"
+  //   console.log(formatLapTime('0102333')); // Should work correctly now
+  // }, []);
+
   useEffect(() => {
-    dispatch(fetchLeaderboard()); // ✅ Fetch leaderboard on mount
+    dispatch(fetchLeaderboard());
+    dispatch(fetchRuns());
 
-    // ✅ Listen for WebSocket updates
     socket.on('runAdded', (data) => {
-      if (!data.leaderboardEntry) return;
+      dispatch(updateLeaderboard(data.leaderboardEntry));
+      dispatch(updateRuns(data.runsGrouped));
+    });
 
-      dispatch(updateLeaderboard(data.leaderboardEntry)); // ✅ Dispatch update to Redux
+    socket.on('runDeleted', (data) => {
+      dispatch(updateLeaderboard(data.leaderboardEntry));
+      dispatch(updateRuns(data.runsGrouped));
     });
 
     return () => {
-      socket.off('runAdded'); // ✅ Cleanup WebSocket listener
+      socket.off('runAdded');
+      socket.off('runDeleted');
     };
   }, [dispatch]);
 

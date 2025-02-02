@@ -13,40 +13,23 @@ const parseLapTime = (rawTime) => {
   return result;
 };
 
+// ✅ Corrected Function for Formatting Gaps (no unnecessary padding)
 const formatGapToFirstPlace = (gapInMilliseconds) => {
-  const formattedGap = (gapInMilliseconds / 1000).toFixed(3); // Convert to seconds and format to 3 decimal places
-  return formattedGap.padStart(6, '0'); // Ensure the format is `00.000`
+  return (gapInMilliseconds / 1000).toFixed(3); // Convert to seconds with 3 decimal places
 };
 
 const formatLapTime = (totalMilliseconds) => {
-  const minutes = Math.floor(totalMilliseconds / 60000);
-  const seconds = Math.floor((totalMilliseconds % 60000) / 1000);
-  const milliseconds = totalMilliseconds % 1000;
+  const timeMs = parseInt(totalMilliseconds, 10); // Ensure it's a number
+  if (isNaN(timeMs) || timeMs < 0) return '00:00.000'; // Handle invalid cases
 
-  const result = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(
+  const minutes = Math.floor(timeMs / 60000);
+  const seconds = Math.floor((timeMs % 60000) / 1000);
+  const milliseconds = timeMs % 1000;
+
+  // Ensure milliseconds are **always** three digits (e.g., "003", "120", "999")
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(
     milliseconds
   ).padStart(3, '0')}`;
-
-  return result;
-};
-
-const calculateLapTime = (sortedData) => {
-  if (sortedData.length === 0) return [];
-
-  return sortedData.map((record) => {
-    const lapTimeMilliseconds = parseLapTime(record.lapTime);
-    const formattedLapTime = formatLapTime(lapTimeMilliseconds);
-
-    return {
-      ...record,
-      lapTime: formattedLapTime
-    };
-  });
-};
-
-const sortAndCalculateLeaderboard = (data) => {
-  const sortedData = [...data].sort((a, b) => parseLapTime(a.lapTime) - parseLapTime(b.lapTime));
-  return calculateLapTime(sortedData);
 };
 
 const getColorForCarType = (carType) => {
@@ -63,10 +46,4 @@ const getColorForCarType = (carType) => {
   }
 };
 
-export {
-  sortAndCalculateLeaderboard,
-  formatLapTime,
-  getColorForCarType,
-  parseLapTime,
-  formatGapToFirstPlace
-};
+export { formatLapTime, getColorForCarType, parseLapTime, formatGapToFirstPlace };
