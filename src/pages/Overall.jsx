@@ -5,10 +5,10 @@ import io from 'socket.io-client';
 import { fetchRuns, updateRuns } from '../redux/runSlice';
 import overall from '../assets/RUN_OVERALL[1].png';
 
-const ITEMS_PER_PAGE = 4;
-const COLUMNS = 5;
+const ITEMS_PER_PAGE = 4; // ✅ Show 4 drivers per page
+const COLUMNS = 5; // ✅ Set number of columns
 
-const socket = io('http://localhost:3002'); // ✅ Connect to WebSocket
+const socket = io('http://localhost:3002'); // ✅ Connect to WebSocket server
 
 const Overall = () => {
   const dispatch = useDispatch();
@@ -21,50 +21,58 @@ const Overall = () => {
   useEffect(() => {
     dispatch(fetchRuns());
 
+    // ✅ Listen for WebSocket updates
     socket.on('runAdded', (data) => {
       dispatch(updateRuns(data.runsGrouped));
     });
 
     socket.on('runDeleted', () => {
-      dispatch(fetchRuns());
+      dispatch(fetchRuns()); // ✅ Fetch updated runs when a run is deleted
     });
 
     return () => {
-      socket.off('runAdded');
-      socket.off('runDeleted');
+      socket.off('runAdded'); // ✅ Cleanup WebSocket listener
+      socket.off('runDeleted'); // ✅ Cleanup WebSocket listener
     };
   }, [dispatch]);
 
+  // ✅ Watch for `runsByDriver` changes and update fastestOverallRun & personalBestTimes
   useEffect(() => {
     let fastestRun = null;
     const newPersonalBestTimes = {};
 
     runsByDriver?.forEach((driver) => {
       driver.cars.forEach((car) => {
-        const sortedRuns = [...car.runs].sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
+        let bestTime = Infinity;
 
-        // ✅ Track personal best for driver-car
-        newPersonalBestTimes[`${driver.name}-${car.carName}`] = sortedRuns[0]?.time || null;
+        car.runs.forEach((run) => {
+          // ✅ Use `rawTime` directly instead of parsing
+          const rawTime = run.rawTime;
 
-        // ✅ Track fastest overall run
-        sortedRuns.forEach((run) => {
-          const rawTime = parseFloat(run.time);
-
-          if (!fastestRun || rawTime < parseFloat(fastestRun.time)) {
+          // ✅ Track fastest overall run
+          if (!fastestRun || rawTime < fastestRun.rawTime) {
             fastestRun = {
               driverName: driver.name,
               carName: car.carName,
               runNumber: run.runNumber,
-              time: run.time
+              time: run.time,
+              rawTime
             };
           }
+
+          // ✅ Track personal best for driver-car combination
+          if (rawTime < bestTime) {
+            bestTime = rawTime;
+          }
         });
+
+        newPersonalBestTimes[`${driver.name}-${car.carName}`] = bestTime;
       });
     });
 
     setFastestOverallRun(fastestRun);
     setPersonalBestTimes(newPersonalBestTimes);
-  }, [runsByDriver]);
+  }, [runsByDriver]); // ✅ Updates dynamically when `runsByDriver` changes
 
   if (!runsByDriver || runsByDriver.length === 0) {
     return <p className="text-center text-xl mt-4">Loading...</p>;
@@ -83,7 +91,7 @@ const Overall = () => {
         <img id="sa-logo" src={overall} alt="SpeedNAdrenaline Logo" />
       </div>
 
-      {/* ✅ Fastest Run Header - Now Updates Correctly */}
+      {/* ✅ Fastest Run Header - Updates Dynamically */}
       {fastestOverallRun && (
         <div className="text-center bg-purple-600 text-white py-2 text-xl font-bold uppercase">
           Fastest Run: {fastestOverallRun.driverName} - {fastestOverallRun.carName}
@@ -106,26 +114,22 @@ const Overall = () => {
                   <div key={`car-${driver.name}-${car.carName}`} className="ml-8 mt-2">
                     <h3 className="text-2xl font-semibold">{car.carName}</h3>
 
+                    {/* ✅ Runs in 5 columns using flex with alternating colors */}
                     <div className="flex justify-start gap-6 mt-2 border">
                       {[...Array(COLUMNS)].map((_, colIndex) => (
                         <div key={`col-${colIndex}`} className="flex flex-col text-right">
                           {car.runs
                             .filter((_, index) => index % COLUMNS === colIndex)
                             .map((run) => {
-                              const isGray = (run.runNumber - 1) % COLUMNS === colIndex;
-                              const isFastestOverall =
-                                fastestOverallRun &&
-                                run.time === fastestOverallRun.time &&
-                                fastestOverallRun.driverName === driver.name &&
-                                fastestOverallRun.carName === car.carName;
-                              const isPersonalBest = personalBest && run.time === personalBest;
+                              const isFastestOverall = fastestOverallRun?.rawTime === run.rawTime;
+                              const isPersonalBest = personalBest === run.rawTime;
 
                               return (
                                 <div
                                   key={`run-${driver.name}-${car.carName}-${run.runNumber}`}
                                   className={`text-lg px-2 py-1 rounded-sm ${
-                                    isGray ? 'bg-gray-200' : ''
-                                  } ${isPersonalBest ? 'text-green-600 font-bold' : ''} ${
+                                    isPersonalBest ? 'text-green-600 font-bold' : ''
+                                  } ${
                                     isFastestOverall
                                       ? 'bg-purple-600 text-white font-extrabold'
                                       : ''
@@ -144,32 +148,7 @@ const Overall = () => {
             </div>
           ))}
         </div>
-      ) : (
-        <p className="text-center text-xl mt-4">No runs available</p>
-      )}
-
-      {/* ✅ Pagination Controls */}
-      {runsByDriver.length > ITEMS_PER_PAGE && (
-        <div className="flex justify-center mt-6 space-x-4">
-          <button
-            className="px-4 py-2 bg-gray-300 text-black rounded-md disabled:opacity-50"
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-          >
-            ◀ Previous
-          </button>
-          <span className="text-xl font-bold">
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            className="px-4 py-2 bg-gray-300 text-black rounded-md disabled:opacity-50"
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-            disabled={currentPage === totalPages}
-          >
-            Next ▶
-          </button>
-        </div>
-      )}
+      ) : null}
     </div>
   );
 };
