@@ -115,17 +115,17 @@ const Row = (props) => {
         </td>
 
         {/* ✅ Dropdown with Delete Button */}
-        <td className="font-titillium text-[1.3rem] mr-[2rem] font-semibold text-center">
+        <td className="font-titillium text-[1.3rem] font-semibold text-center">
           <div className="relative inline-block">
             <select
               value={selectedRun || ''}
               onChange={handleRunSelect}
-              className="px-2 py-1 border rounded-md text-black"
+              className="py-1 border rounded-md text-black"
             >
               {driverRuns.length > 0 ? (
                 driverRuns.map((run, index) => (
                   <option key={index} value={run.time}>
-                    Run {run.runNumber}: {run.time} {run.time === bestTime ? '(BEST)' : ''}
+                    Run {run.runNumber}: {run.time}
                   </option>
                 ))
               ) : (
@@ -138,9 +138,11 @@ const Row = (props) => {
             {/* ✅ Delete Button inside Dropdown */}
             <button
               onClick={handleDeleteRun}
-              className="absolute right-0 top-0 h-full px-2 bg-red-600 text-white rounded-r-md hover:bg-red-800"
+              className="absolute right-[-.5rem] top-0 h-full bg-red-600 px-2 text-white  hover:bg-red-800"
               disabled={driverRuns.length === 0} // ✅ Disable if no runs exist
-            ></button>
+            >
+              x
+            </button>
           </div>
         </td>
 

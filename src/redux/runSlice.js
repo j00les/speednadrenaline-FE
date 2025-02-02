@@ -1,12 +1,24 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { formatLapTime, parseLapTime } from '../util';
 
 const BASE_URL = 'http://localhost:3002';
 
 // ✅ Fetch all runs grouped by driver and car
 export const fetchRuns = createAsyncThunk('runs/fetchRuns', async () => {
   const response = await axios.get(`${BASE_URL}/runs`);
-  return response.data;
+
+  // ✅ Ensure lap times are formatted before returning the response
+  return response.data.map((driver) => ({
+    ...driver,
+    cars: driver.cars.map((car) => ({
+      ...car,
+      runs: car.runs.map((run) => ({
+        ...run,
+        time: formatLapTime(parseLapTime(run.time)) // ✅ Format lap time properly
+      }))
+    }))
+  }));
 });
 
 // ✅ Delete a specific run

@@ -31,13 +31,6 @@ const Table = (props) => {
     }
   };
 
-  // useEffect(() => {
-  //   console.log(formatLapTime(102333)); // Expected: "01:42.333"
-  //   console.log(formatLapTime(12345)); // Expected: "00:12.345"
-  //   console.log(formatLapTime(9876)); // Expected: "00:09.876"
-  //   console.log(formatLapTime('0102333')); // Should work correctly now
-  // }, []);
-
   useEffect(() => {
     dispatch(fetchLeaderboard());
     dispatch(fetchRuns());
@@ -107,7 +100,6 @@ const Table = (props) => {
                 GAP TO 1<sup>st</sup>
               </th>
               <th className="text-center pr-[2rem]">CAR NAME</th>
-              <th className="text-center pr-[2rem]"></th>
             </tr>
           </thead>
           <tbody className="text-2xl">

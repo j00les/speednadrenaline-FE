@@ -5,10 +5,10 @@ import io from 'socket.io-client';
 import { fetchRuns, updateRuns } from '../redux/runSlice';
 import overall from '../assets/RUN_OVERALL[1].png';
 
-const ITEMS_PER_PAGE = 4; // ✅ Show 4 drivers per page
-const COLUMNS = 5; // ✅ Set number of columns
+const ITEMS_PER_PAGE = 4;
+const COLUMNS = 5;
 
-const socket = io('http://localhost:3002'); // ✅ Connect to WebSocket server
+const socket = io('http://localhost:3002'); // ✅ Connect to WebSocket
 
 const Overall = () => {
   const dispatch = useDispatch();
@@ -21,57 +21,50 @@ const Overall = () => {
   useEffect(() => {
     dispatch(fetchRuns());
 
-    // ✅ Listen for WebSocket updates
     socket.on('runAdded', (data) => {
       dispatch(updateRuns(data.runsGrouped));
     });
 
     socket.on('runDeleted', () => {
-      dispatch(fetchRuns()); // ✅ Fetch updated runs when a run is deleted
+      dispatch(fetchRuns());
     });
 
     return () => {
-      socket.off('runAdded'); // ✅ Cleanup WebSocket listener
-      socket.off('runDeleted'); // ✅ Cleanup WebSocket listener
+      socket.off('runAdded');
+      socket.off('runDeleted');
     };
   }, [dispatch]);
 
-  // ✅ Watch for `runsByDriver` changes and update fastestOverallRun & personalBestTimes
   useEffect(() => {
     let fastestRun = null;
     const newPersonalBestTimes = {};
 
     runsByDriver?.forEach((driver) => {
       driver.cars.forEach((car) => {
-        let bestTime = Infinity;
+        const sortedRuns = [...car.runs].sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
 
-        car.runs.forEach((run) => {
+        // ✅ Track personal best for driver-car
+        newPersonalBestTimes[`${driver.name}-${car.carName}`] = sortedRuns[0]?.time || null;
+
+        // ✅ Track fastest overall run
+        sortedRuns.forEach((run) => {
           const rawTime = parseFloat(run.time);
 
-          // ✅ Track fastest overall run
-          if (!fastestRun || rawTime < fastestRun.rawTime) {
+          if (!fastestRun || rawTime < parseFloat(fastestRun.time)) {
             fastestRun = {
               driverName: driver.name,
               carName: car.carName,
               runNumber: run.runNumber,
-              time: run.time,
-              rawTime
+              time: run.time
             };
           }
-
-          // ✅ Track personal best for driver-car combination
-          if (rawTime < bestTime) {
-            bestTime = rawTime;
-          }
         });
-
-        newPersonalBestTimes[`${driver.name}-${car.carName}`] = bestTime;
       });
     });
 
     setFastestOverallRun(fastestRun);
     setPersonalBestTimes(newPersonalBestTimes);
-  }, [runsByDriver]); // ✅ Updates dynamically when `runsByDriver` changes
+  }, [runsByDriver]);
 
   if (!runsByDriver || runsByDriver.length === 0) {
     return <p className="text-center text-xl mt-4">Loading...</p>;
@@ -90,7 +83,7 @@ const Overall = () => {
         <img id="sa-logo" src={overall} alt="SpeedNAdrenaline Logo" />
       </div>
 
-      {/* ✅ Fastest Run Header - Updates Dynamically */}
+      {/* ✅ Fastest Run Header - Now Updates Correctly */}
       {fastestOverallRun && (
         <div className="text-center bg-purple-600 text-white py-2 text-xl font-bold uppercase">
           Fastest Run: {fastestOverallRun.driverName} - {fastestOverallRun.carName}
@@ -102,7 +95,6 @@ const Overall = () => {
         <div className="mt-4">
           {paginatedDrivers.map((driver) => (
             <div key={`driver-${driver.name}`} className="mt-6">
-              {/* ✅ Driver Name Header */}
               <h2 className="bg-red-600 text-white py-2 px-4 uppercase text-xl font-bold">
                 {driver.name}
               </h2>
@@ -112,10 +104,8 @@ const Overall = () => {
 
                 return (
                   <div key={`car-${driver.name}-${car.carName}`} className="ml-8 mt-2">
-                    {/* ✅ Car Name Header */}
                     <h3 className="text-2xl font-semibold">{car.carName}</h3>
 
-                    {/* ✅ Runs in 5 columns using flex with alternating colors */}
                     <div className="flex justify-start gap-6 mt-2 border">
                       {[...Array(COLUMNS)].map((_, colIndex) => (
                         <div key={`col-${colIndex}`} className="flex flex-col text-right">
@@ -125,9 +115,10 @@ const Overall = () => {
                               const isGray = (run.runNumber - 1) % COLUMNS === colIndex;
                               const isFastestOverall =
                                 fastestOverallRun &&
-                                parseFloat(run.time) === fastestOverallRun.rawTime;
-                              const isPersonalBest =
-                                personalBest && parseFloat(run.time) === personalBest;
+                                run.time === fastestOverallRun.time &&
+                                fastestOverallRun.driverName === driver.name &&
+                                fastestOverallRun.carName === car.carName;
+                              const isPersonalBest = personalBest && run.time === personalBest;
 
                               return (
                                 <div

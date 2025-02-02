@@ -15,9 +15,9 @@ const Input = () => {
   const [time, setTime] = useState('');
   const [drivetrain, setDriveTrain] = useState('');
 
-  const handleDriverNameChange = (event) => setDriverName('eel');
-  const handleCarNameChange = (event) => setCarName('brio');
-  const handleDrivetrainChange = (event) => setDriveTrain('awd');
+  const handleDriverNameChange = (event) => setDriverName(event.target.value);
+  const handleCarNameChange = (event) => setCarName(event.target.value);
+  const handleDrivetrainChange = (event) => setDriveTrain(event.target.value);
   const handleTimeChange = (event) => setTime(event.target.value);
 
   const handleSubmit = (e) => {

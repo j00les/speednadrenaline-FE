@@ -156,34 +156,6 @@ const leaderboardSlice = createSlice({
   }
 });
 
-// ✅ Fix Sorting Issue in `recalculateGapToFirst`
-// const recalculateGapToFirst = (leaderboard) => {
-//   if (!leaderboard || leaderboard.length === 0) return [];
-
-//   // ✅ Ensure sorting is done correctly
-//   const sortedLeaderboard = [...leaderboard].sort(
-//     (a, b) => parseInt(a.time.replace(/[:.]/g, ''), 10) - parseInt(b.time.replace(/[:.]/g, ''), 10)
-//   );
-
-//   // ✅ Get first place time (fastest time)
-//   const firstPlaceTime = sortedLeaderboard[0]?.time || '00:00.000';
-//   const firstPlaceTimeMs = parseInt(firstPlaceTime.replace(/[:.]/g, ''), 10);
-
-//   return sortedLeaderboard.map((entry) => {
-//     const entryTimeMs = parseInt(entry.time.replace(/[:.]/g, ''), 10);
-//     const gap = entryTimeMs - firstPlaceTimeMs;
-
-//     return {
-//       ...entry,
-//       // time: formatLapTime(parseInt(entry.time, 10)), // ✅ Proper formatting
-//       // gapToFirst: formatGapToFirstPlace(gap) // ✅ Ensure correct gap formatting
-
-//       time: formatLapTime(entry.time), // ✅ Proper formatting
-//       gapToFirst: formatGapToFirstPlace(gap) // ✅ Ensure correct gap formatting
-//     };
-//   });
-
-// };
 // ✅ Fix Sorting and Gap Calculation
 const recalculateGapToFirst = (leaderboard) => {
   if (!leaderboard || leaderboard.length === 0) return [];

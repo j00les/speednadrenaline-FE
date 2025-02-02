@@ -14,8 +14,11 @@ const parseLapTime = (rawTime) => {
 };
 
 // ✅ Corrected Function for Formatting Gaps (no unnecessary padding)
-const formatGapToFirstPlace = (gapInMilliseconds) => {
-  return (gapInMilliseconds / 1000).toFixed(3); // Convert to seconds with 3 decimal places
+const formatGapToFirstPlace = (gapMilliseconds) => {
+  if (!gapMilliseconds || isNaN(gapMilliseconds)) return '00.00';
+
+  const seconds = (gapMilliseconds / 1000).toFixed(2);
+  return seconds.padStart(5, '0'); // Ensures "02.88" format
 };
 
 const formatLapTime = (totalMilliseconds) => {
