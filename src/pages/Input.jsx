@@ -15,8 +15,8 @@ const Input = () => {
   const [time, setTime] = useState('');
   const [drivetrain, setDriveTrain] = useState('');
 
-  const handleDriverNameChange = (event) => setDriverName(event.target.value);
-  const handleCarNameChange = (event) => setCarName(event.target.value);
+  const handleDriverNameChange = (event) => setDriverName('popo');
+  const handleCarNameChange = (event) => setCarName('gr yaris 51');
   const handleDrivetrainChange = (event) => setDriveTrain(event.target.value);
   const handleTimeChange = (event) => setTime(event.target.value);
 
@@ -67,7 +67,7 @@ const Input = () => {
           />
           <Dropdown
             options={DRIVETRAIN}
-            value={'awd'}
+            value={drivetrain}
             onChange={handleDrivetrainChange}
             id="1"
             placeholder="drivetrain"

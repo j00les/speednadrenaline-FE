@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getColorForCarType } from '../util';
 import { useEffect, useState } from 'react';
 import { socket } from '../redux/socketMiddleware';
-import { deleteRun, fetchRuns } from '../redux/runSlice';
+import { fetchLeaderboard } from '../redux/leaderboardSlice';
 
 const Row = (props) => {
   const {
@@ -16,62 +16,34 @@ const Row = (props) => {
   const POSITION = index + 1;
   const blockColor = getColorForCarType(drivetrain);
   const dispatch = useDispatch();
-  const { runsByDriver, status } = useSelector((state) => state.runs);
-  const [selectedRun, setSelectedRun] = useState('');
+  const { leaderboard, status } = useSelector((state) => state.leaderboard);
 
-  // ✅ Fetch runs initially if not loaded
+  // ✅ Fetch leaderboard initially if not loaded
   useEffect(() => {
     if (status === 'idle') {
-      dispatch(fetchRuns());
+      dispatch(fetchLeaderboard());
     }
   }, [dispatch, status]);
 
-  // ✅ WebSocket Listener for Real-Time Run Updates
+  // ✅ WebSocket Listener for Real-Time Updates
   useEffect(() => {
-    socket.on('runDeleted', () => {
-      dispatch(fetchRuns()); // ✅ Fetch latest runs on deletion
+    socket.on('runAdded', () => {
+      dispatch(fetchLeaderboard()); // ✅ Fetch latest leaderboard on new run
     });
 
     return () => {
-      socket.off('runDeleted');
+      socket.off('runAdded');
     };
   }, [dispatch]);
 
-  // ✅ Extract runs for this driver & car
-  const driverEntry = runsByDriver?.find((d) => d.name === name);
-  const carEntry = driverEntry?.cars?.find((c) => c.carName === carName);
-  let driverRuns = carEntry?.runs || [];
+  // ✅ Find the fastest time for this driver-car in the leaderboard
+  const leaderboardEntry = leaderboard?.find(
+    (entry) => entry.name === name && entry.carName === carName
+  );
+  const fastestTime = leaderboardEntry ? leaderboardEntry.time : 'N/A';
 
-  // ✅ Ensure runs are sorted by best time dynamically
-  driverRuns = [...driverRuns].sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
-  const bestTime = driverRuns.length > 0 ? driverRuns[0].time : 'N/A';
-
-  // ✅ Ensure selectedRun updates dynamically
-  useEffect(() => {
-    if (driverRuns.length > 0) {
-      setSelectedRun(driverRuns[0].time); // ✅ Select best time by default
-    }
-  }, [driverRuns]);
-
-  const handleRunSelect = (event) => {
-    setSelectedRun(event.target.value);
-  };
-
-  const handleDeleteRun = async (timeToDelete) => {
-    if (!timeToDelete) return;
-
-    dispatch(deleteRun({ name, carName, time: timeToDelete }))
-      .unwrap()
-      .then(() => {
-        const updatedRuns = driverRuns.filter((run) => run.time !== timeToDelete);
-        updatedRuns.sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
-        setSelectedRun(updatedRuns.length > 0 ? updatedRuns[0].time : '');
-      })
-      .catch((error) => console.error('❌ Error deleting run:', error));
-  };
-
-  // ✅ Ensure `runsByDriver` is available before rendering UI
-  if (status === 'loading' || !runsByDriver) {
+  // ✅ Ensure `leaderboard` is available before rendering UI
+  if (status === 'loading' || !leaderboard) {
     return (
       <tr>
         <td colSpan="4" className="text-center">
@@ -83,12 +55,12 @@ const Row = (props) => {
 
   const renderLeaderboardRow = () => (
     <tr className={`font-sugo uppercase ${POSITION % 2 === 0 ? 'bg-[#D4D4D4]' : ''}`}>
-      <td className={`flex gap-1.5 w-[13rem] p-[.8rem] items-center`}>
+      <td className="flex gap-1.5 w-[13rem] p-[.8rem] items-center">
         <span className="text-[2.5rem] font-titillium font-medium">{POSITION}</span>
         <span className={`p-[.4rem] h-[2.7rem] ${blockColor}`}></span>
         <span className="text-[2.5rem] tracking-tight">{name}</span>
       </td>
-      <td className="font-titillium text-[2.2rem] font-semibold text-center">{time}</td>
+      <td className="font-titillium text-[2.2rem] font-semibold text-center">{fastestTime}</td>
       <td className="text-[2.2rem] text-center pr-[.5rem] font-titillium font-semibold">
         {gapToFirst}
       </td>
@@ -98,53 +70,20 @@ const Row = (props) => {
 
   const renderInputRow = () => (
     <tr className="font-titillium uppercase">
-      <td className="flex gap-1.5 w-[12rem] items-center">
+      <td className="flex gap-1.5 w-[12rem] items-center mt-3">
         <span className="text-[1.3rem] font-titillium font-medium">{POSITION}</span>
-        <span className="w-[.5rem] h-[1.6rem] my-1 bg-gray-500"></span>
+        <span className={`w-[.5rem] h-[1.7rem] ${blockColor}`}></span>
         <span className="text-[1.26rem] font-semibold tracking-tight">{name}</span>
       </td>
 
-      {/* ✅ Dropdown with Delete Button */}
-      <td className="font-titillium text-[1.3rem] font-semibold text-center">
-        <div className="relative inline-block w-[12rem]">
-          <select
-            value={selectedRun || ''}
-            onChange={handleRunSelect}
-            className="py-1 border rounded-md text-black w-full"
-          >
-            {driverRuns.length > 0 ? (
-              driverRuns.map((run, index) => (
-                <option key={index} value={run.time}>
-                  Run {run.runNumber}: {run.time} {run.time === bestTime ? '(PB)' : ''}
-                </option>
-              ))
-            ) : (
-              <option value="" disabled>
-                No Runs Available
-              </option>
-            )}
-          </select>
-
-          {/* ✅ Separate Delete Button for Each Run */}
-          <div className="absolute top-0 right-0 flex flex-col">
-            {driverRuns.map((run) => (
-              <button
-                key={run.time}
-                onClick={() => handleDeleteRun(run.time)}
-                className="mt-1 bg-red-600 text-white px-2 py-1 rounded-md hover:bg-red-800 w-full text-xs"
-              >
-                ❌ Run {run.runNumber}
-              </button>
-            ))}
-          </div>
-        </div>
-      </td>
+      {/* ✅ Display only the fastest time */}
+      <td className="font-titillium text-[1.3rem] font-semibold text-center py-2">{fastestTime}</td>
 
       <td className="text-[1.3rem] text-center pr-[.5rem] font-titillium font-semibold">
         {gapToFirst}
       </td>
 
-      <td className="text-[1.3rem] text-left pl-[1rem] w-[10rem] font-titillium font-semibold">
+      <td className="text-[1.3rem] text-left pl-[4rem] w-[10rem] font-titillium font-semibold">
         {carName}
       </td>
     </tr>
@@ -158,7 +97,7 @@ const Row = (props) => {
         <span className="text-[1rem]">{name}</span>
       </td>
       <td className="font-titillium pl-[1.3rem] text-[.9rem] tracking-tighter font-semibold text-center">
-        {time}
+        {fastestTime}
       </td>
       <td className="text-[.9rem] text-center pr-[.2rem] font-titillium font-semibold">
         {gapToFirst}

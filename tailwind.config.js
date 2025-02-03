@@ -27,6 +27,12 @@ export default {
         'tv-small': '1.5rem', // Slightly larger for readability on a big screen
         'tv-medium': '2rem',
         'tv-large': '2.5rem'
+      },
+      colors: {
+        'rgb-red': 'rgb(255,0,0)'
+      },
+      backgrounds: {
+        'rgb-red': 'rgb(255,0,0)'
       }
     }
   },
